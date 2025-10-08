@@ -19,6 +19,15 @@ class Settings(BaseSettings):
     PORT: int = 5000
     RELOAD: bool = True
 
+    # Servidor de e-mail
+    SMTP_SERVER: str
+    SMTP_PORT: int
+    SMTP_USER: str
+    SMTP_PASS: str
+
+    # Servidor Frontend
+    FRONTEND_URL: str
+
     @property
     def DATABASE_URL(self) -> str:
         """

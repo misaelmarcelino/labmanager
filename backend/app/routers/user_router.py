@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+import secrets
+import string
 from app.core.database import get_db
 from app.core.dependencies import get_current_user, require_admin
-from app.core.security import hash_password
 from app.models.user import User
 from app.schemas.user_schema import UserCreate, UserUpdate, UserSelfUpdate, UserResponse
+from app.core.mailer import send_welcome_email
+
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -28,15 +31,29 @@ def create_user(
     if existing:
         raise HTTPException(status_code=400, detail="E-mail já cadastrado")
 
+    # 🔹 Gerar senha aleatória (10 caracteres)
+    alphabet = string.ascii_letters + string.digits + "!@#$%&*"
+    temp_password = "".join(secrets.choice(alphabet) for _ in range(10))
+
+    # 🔹 Criar usuário com senha criptografada
+    from app.core.security import hash_password
     new_user = User(
         name=user_data.name,
         email=user_data.email,
-        password=hash_password(user_data.password),
-        role=user_data.role.upper()
+        password=hash_password(temp_password),
+        role=user_data.role.value
     )
+
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    # 🔹 Enviar e-mail de boas-vindas
+    try:
+        send_welcome_email(new_user.email, new_user.name, temp_password)
+    except Exception as e:
+        print(f"⚠️ Erro ao enviar e-mail: {e}")
+
     return new_user
 
 # 🔹 Buscar usuário por ID

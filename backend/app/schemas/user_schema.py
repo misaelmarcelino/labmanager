@@ -10,8 +10,7 @@ class RoleEnum(str, Enum):
 class UserCreate(BaseModel):
     name: str
     email: EmailStr
-    password: str
-    role: RoleEnum = RoleEnum.USER
+    role: RoleEnum = RoleEnum.USER # Padrão é 'USER'
 
 class UserUpdate(BaseModel):
     name: Optional[str] = None
