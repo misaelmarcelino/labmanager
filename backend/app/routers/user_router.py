@@ -51,10 +51,29 @@ def create_user(
     # 🔹 Enviar e-mail de boas-vindas
     try:
         send_welcome_email(new_user.email, new_user.name, temp_password)
+        print(f"📨 E-mail enviado para {new_user.email}")
+        email_sent = True
     except Exception as e:
         print(f"⚠️ Erro ao enviar e-mail: {e}")
+        email_sent = False
 
-    return new_user
+    # 🔹 Mensagem de retorno personalizada
+    message = (
+        "Usuário criado com sucesso! E-mail de acesso enviado ao colaborador."
+        if email_sent
+        else "Usuário criado com sucesso, mas houve erro ao enviar o e-mail."
+    )
+
+    return {
+        "message": message,
+        "user": {
+            "id": new_user.id,
+            "name": new_user.name,
+            "email": new_user.email,
+            "role": new_user.role
+        }
+    }
+
 
 # 🔹 Buscar usuário por ID
 @router.get("/{user_id}", response_model=UserResponse)
