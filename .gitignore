@@ -1,2 +1,7 @@
+# Arquivo .gitignore
+# Ignorar arquivos de configuração sensíveis
 .env
+# Banco de dados local
 *.db
+*.sqlite
+*.sqlite3
