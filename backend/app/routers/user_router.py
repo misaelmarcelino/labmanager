@@ -7,7 +7,7 @@ from app.core.database import get_db
 from app.core.dependencies import get_current_user, require_admin
 from app.models.user import User
 from app.schemas.user_schema import UserCreate, UserUpdate, UserSelfUpdate, UserResponse
-from app.core.mailer import send_welcome_email
+from app.services.mail_service import send_welcome_email
 
 
 router = APIRouter(prefix="/users", tags=["Users"])
