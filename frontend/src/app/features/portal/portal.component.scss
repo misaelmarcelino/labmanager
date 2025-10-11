@@ -1,0 +1,43 @@
+/* portal.component.scss */
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* Layout principal abaixo do header */
+.main {
+  display: flex;
+  flex: 1 1 auto;
+  overflow: hidden;
+
+
+  /* área de conteúdo principal */
+  .portal-content {
+    flex: 1 1 auto;
+    height: calc(100vh - 80px);
+    overflow-y: auto;
+    padding: 1.5rem;
+    background-color: #ffffff;
+  }
+}
+
+/* Ajustes responsivos, por exemplo para telas pequenas */
+@media (max-width: 768px) {
+  .main {
+    flex-direction: column;
+
+    app-portal-sidebar {
+      flex: 0 0 auto;
+      width: 100%;
+      height: auto;
+      box-shadow: none;
+    }
+
+    .portal-content {
+      padding: 1rem;
+    }
+  }
+}

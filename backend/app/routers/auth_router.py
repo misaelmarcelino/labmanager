@@ -55,7 +55,7 @@ def change_password(
 
     return {"message": "Senha alterada com sucesso!"}
 
-@router.post("/reset-password", summary="Enviar link de redefinição de senha")
+@router.post("/forgot-password", summary="Enviar link de redefinição de senha")
 def reset_password_request(payload: PasswordResetRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
     if not user:

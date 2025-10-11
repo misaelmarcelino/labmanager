@@ -21,7 +21,7 @@ class Equipment(Base):
     versao_solucao = Column(String, nullable=False)
     descricao = Column(String, nullable=False)
     data_limite = Column(Date, nullable=False)
-    resposavel = Column(String, nullable=False)
+    responsavel = Column(String, nullable=False)
     status = Column(String, nullable=False)
 
     created_at = Column(DateTime, default=datetime.utcnow)

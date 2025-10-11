@@ -1,0 +1,58 @@
+<main class="content flex-grow-1 p-4">
+  <div class="container mt-4">
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
+    </div>
+
+    <div *ngIf="equipamentos.length > 0; else noEquipment">
+      <div class="table-responsive shadow-sm rounded">
+        <table class="table table-striped table-hover align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Código</th>
+              <th>Posto</th>
+              <th>Razão de Uso</th>
+              <th>Versão</th>
+              <th>Motivo</th>
+              <th>Data Limite</th>
+              <th>Responsável</th>
+              <th>Status</th>
+              <th *ngIf="isAdmin()" class="text-center">Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let eq of equipamentos">
+              <td>{{ eq.codigo }}</td>
+              <td>{{ eq.nome_posto }}</td>
+              <td>{{ eq.razao_uso || '-' }}</td>
+              <td>{{ eq.vs_solucao }}</td>
+              <td>{{ eq.motivo_homologacao }}</td>
+              <td>{{ eq.data_limite_homologacao ? (eq.data_limite_homologacao | date:'dd/MM/yyyy') : '-' }}</td>
+              <td>{{ eq.responsavel }}</td>
+              <td>
+                <span
+                  *ngIf="eq.status === 'Aprovado'; else elseStatus"
+                  class="badge bg-success">{{ eq.status }}</span>
+                <ng-template #elseStatus>
+                  <span
+                    *ngIf="eq.status === 'Reprovado'; else pending"
+                    class="badge bg-danger">{{ eq.status }}</span>
+                  <ng-template #pending>
+                    <span class="badge bg-warning text-dark">{{ eq.status }}</span>
+                  </ng-template>
+                </ng-template>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <ng-template #noEquipment>
+      <div class="alert alert-info mt-4 text-center">
+        Nenhum equipamento cadastrado até o momento.
+      </div>
+    </ng-template>
+  </div>
+
+</main>

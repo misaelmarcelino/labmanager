@@ -1,0 +1,38 @@
+<div class="sidebar">
+  <nav class="navbar bg-dark text-white vh-100 p-3">
+    <ul class="nav flex-column">
+        <li class="nav-item mb-2">
+            <a routerLink="/portal/dashboard" class="nav-link text-white">
+              <i class="bi bi-speedometer2"></i>
+              Dashboard
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a routerLink="/portal/equipamentos" class="nav-link text-white">
+              <i class="bi bi-hdd-stack"></i>
+              Equipamentos
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a routerLink="/portal/usuarios" class="nav-link text-white">
+              <i class="bi bi-people-fill"></i>
+              Gestão de Usuários
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a routerLink="/portal/relatorios" class="nav-link text-white">
+              <i class="bi bi-file-earmark-text-fill"></i>
+              Relatórios
+            </a>
+        </li>
+        <li class="nav-item mb-2">
+            <a routerLink="/portal/configuracoes" class="nav-link text-white">
+              <i class="bi bi-gear"></i>
+              Configurações
+            </a>
+        </li>
+
+    </ul>
+  </nav>
+  <button type="button" class="btn btn-danger mt-4 w-100" (click)="logout()">Sair</button>
+</div>
