@@ -1,1 +1,87 @@
-<p>dashboard works!</p>
+<section class="dashboard container mt-4">
+  <h2 class="text-primary fw-bold mb-4">Painel de Controle</h2>
+
+  <div *ngIf="loading" class="text-center my-5">
+    <div class="spinner-border text-primary" role="status"></div>
+    <p>Carregando dados...</p>
+  </div>
+
+  <div *ngIf="errorMessage" class="alert alert-danger">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!loading && !errorMessage">
+    <!-- 🔹 Cards de resumo -->
+    <div class="row g-4 mb-4">
+      <!-- Usuários -->
+      <div class="col-md-3">
+        <a routerLink="/portal/usuarios" class="card-link">
+          <div class="card text-center shadow-sm border-primary">
+            <div class="card-body">
+              <h5 class="card-title text-muted">Usuários</h5>
+              <h2 class="text-primary">{{ totalUsers }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Equipamentos -->
+      <div class="col-md-3">
+        <a routerLink="/portal/equipamentos" class="card-link">
+          <div class="card text-center shadow-sm border-success">
+            <div class="card-body">
+              <h5 class="card-title text-muted">Equipamentos</h5>
+              <h2 class="text-success">{{ totalEquipments }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Pendentes -->
+      <div class="col-md-3">
+        <a routerLink="/portal/equipamentos" class="card-link">
+          <div class="card text-center shadow-sm border-warning">
+            <div class="card-body">
+              <h5 class="card-title text-muted">Pendentes</h5>
+              <h2 class="text-warning">{{ pendingCount }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+
+      <!-- Reprovados -->
+      <div class="col-md-3">
+        <a routerLink="/portal/equipamentos" class="card-link">
+          <div class="card text-center shadow-sm border-danger">
+            <div class="card-body">
+              <h5 class="card-title text-muted">Reprovados</h5>
+              <h2 class="text-danger">{{ rejectedCount }}</h2>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+
+    <!-- 🔹 Resumo detalhado -->
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h5 class="card-title text-primary">Resumo de Equipamentos</h5>
+
+        <div class="d-flex justify-content-around mt-3">
+          <a routerLink="/portal/equipamentos" class="text-decoration-none text-center text-success">
+            <span class="badge bg-success">Aprovados</span>
+            <h4>{{ approvedCount }}</h4>
+          </a>
+          <a routerLink="/portal/equipamentos" class="text-decoration-none text-center text-warning">
+            <span class="badge bg-warning text-dark">Pendentes</span>
+            <h4>{{ pendingCount }}</h4>
+          </a>
+          <a routerLink="/portal/equipamentos" class="text-decoration-none text-center text-danger">
+            <span class="badge bg-danger">Reprovados</span>
+            <h4>{{ rejectedCount }}</h4>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
