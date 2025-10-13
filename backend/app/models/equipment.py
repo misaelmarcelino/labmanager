@@ -16,6 +16,7 @@ class Equipment(Base):
     __tablename__ = "tb_equipments"
 
     id = Column(Integer, primary_key=True, index=True)
+    codigo = Column(String, unique=True, nullable=False)
     nome_do_posto = Column(String, nullable=False)
     razao_uso = Column(Enum(ReasonForUseEnum), nullable=False)
     versao_solucao = Column(String, nullable=False)

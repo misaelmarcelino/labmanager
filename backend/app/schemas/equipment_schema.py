@@ -1,37 +1,57 @@
-from datetime import datetime
+from datetime import datetime, date
 from typing import Optional
 from pydantic import BaseModel
 from enum import Enum
 
 
+class ReasonForUseEnum(str, Enum):
+    ABASTECE = "ABASTECE"
+    ESTACIONE = "ESTACIONE"
+    DRIVE = "DRIVE"
+    CONCESSIONARIA = "CONCESSIONARIA"
+    OUTROS = "OUTROS"
+
+
 class EquipmentStatus(str, Enum):
-    PENDING = "PENDING"
-    APPROVED = "APPROVED"
-    REJECTED = "REJECTED"
+    PENDENTE = "PENDENTE"
+    APROVADO = "APROVADO"
+    REPROVADO = "REPROVADO"
 
 
+# 🔹 Base comum
 class EquipmentBase(BaseModel):
-    name: str
-    serial_number: str
-    model: Optional[str] = None
-    manufacturer: Optional[str] = None
+    codigo: str
+    nome_do_posto: str
+    razao_uso: ReasonForUseEnum
+    versao_solucao: str
+    descricao: str
+    data_limite: date
+    responsavel: str
+    status: EquipmentStatus = EquipmentStatus.PENDENTE
 
 
+# 🔹 Criação
 class EquipmentCreate(EquipmentBase):
     pass
 
 
+# 🔹 Atualização
 class EquipmentUpdate(BaseModel):
-    name: Optional[str] = None
-    model: Optional[str] = None
-    manufacturer: Optional[str] = None
+    codigo: Optional[str] = None
+    nome_do_posto: Optional[str] = None
+    razao_uso: Optional[ReasonForUseEnum] = None
+    versao_solucao: Optional[str] = None
+    descricao: Optional[str] = None
+    data_limite: Optional[date] = None
+    responsavel: Optional[str] = None
     status: Optional[EquipmentStatus] = None
 
 
+# 🔹 Resposta
 class EquipmentResponse(EquipmentBase):
     id: int
-    status: EquipmentStatus
     created_at: datetime
+    updated_at: datetime
 
     class Config:
         orm_mode = True

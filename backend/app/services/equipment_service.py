@@ -11,8 +11,9 @@ def get_equipment(db: Session, equipment_id: int):
     return db.query(Equipment).filter(Equipment.id == equipment_id).first()
 
 
-def create_equipment(db: Session, data: EquipmentCreate, user_id: int):
-    equipment = Equipment(**data.dict(), created_by=user_id)
+def create_equipment(db: Session, data: EquipmentCreate):
+    equipment_data = data.dict()
+    equipment = Equipment(**equipment_data)
     db.add(equipment)
     db.commit()
     db.refresh(equipment)

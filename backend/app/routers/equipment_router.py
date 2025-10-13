@@ -27,9 +27,8 @@ def get_one(equipment_id: int, db: Session = Depends(get_db)):
 def create(
     data: EquipmentCreate,
     db: Session = Depends(get_db),
-    current_user=Depends(get_current_user)
 ):
-    return equipment_service.create_equipment(db, data, current_user.id)
+    return equipment_service.create_equipment(db, data)
 
 
 @router.put("/{equipment_id}", response_model=EquipmentResponse)
