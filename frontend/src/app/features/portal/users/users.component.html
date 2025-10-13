@@ -2,14 +2,15 @@
   <div *ngIf="errorMessage" class="alert alert-danger">
     {{ errorMessage }}
   </div>
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Gestão de Usuários</h2>
 
-  <h2>Gestão de Usuários</h2>
-
-  <div *ngIf="isAdmin()" class="mb-3">
-    <button class="btn btn-success" (click)="openCreateUserModal()">
-      <i class="bi bi-person-plus"></i>
-      Novo Usuário
-    </button>
+    <div *ngIf="isAdmin()" class="mb-3">
+      <button class="btn btn-success" (click)="openCreateUserModal()">
+        <i class="bi bi-person-plus"></i>
+        Novo Usuário
+      </button>
+    </div>
   </div>
 
   <div class="table-responsive">

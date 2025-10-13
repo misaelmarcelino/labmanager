@@ -12,12 +12,6 @@
         Novo Equipamento
       </button>
 
-      <a routerLink="/export/csv" class="btn btn-outline-primary">
-        <i class="bi bi-filetype-csv"></i> CSV
-      </a>
-      <a routerLink="/export/xlsx" class="btn btn-outline-success">
-        <i class="bi bi-filetype-xlsx"></i> XLSX
-      </a>
     </div>
 
     <div *ngIf="equipamentos.length > 0; else noEquipment">
