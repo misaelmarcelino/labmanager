@@ -1,0 +1,36 @@
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-dark text-white">
+        <h5 class="modal-title">Cadastrar Usuário</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancel()"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label class="form-label">Nome</label>
+            <input type="text" [(ngModel)]="user.name" name="username" class="form-control" placeholder="Nome completo" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input type="email" [(ngModel)]="user.email" name="email" class="form-control" placeholder="exemplo@dominio.com" required>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Tipo de Usuário</label>
+            <select [(ngModel)]="user.role" name="role" class="form-select">
+              <option value="user">Usuário Padrão</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="save()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

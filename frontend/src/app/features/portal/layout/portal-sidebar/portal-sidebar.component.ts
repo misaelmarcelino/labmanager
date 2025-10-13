@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { RouterLink } from "@angular/router";
+import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
   selector: 'app-portal-sidebar',
@@ -10,7 +11,9 @@ import { RouterLink } from "@angular/router";
 })
 export class PortalSidebarComponent {
 
+  constructor(private auth: AuthService) {}
+
   logout(): void {
-    // lógica de logout
+    this.auth.logout();
   }
 }

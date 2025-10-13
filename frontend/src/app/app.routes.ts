@@ -30,6 +30,7 @@ export const routes: Routes = [
     component: PortalComponent,
     canActivate: [authGuard],
     children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
       { path: 'dashboard', loadComponent: () => import('./features/portal/dashboard/dashboard.component').then(m => m.DashboardComponent) },
       { path: 'equipamentos', loadComponent: () => import('./features/portal/equipments/equipments.component').then(m => m.EquipmentsComponent) },
       { path: 'usuarios', loadComponent: () => import('./features/portal/users/users.component').then(m => m.UsersComponent) },

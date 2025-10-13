@@ -1,0 +1,71 @@
+<div class="modal fade show d-block" tabindex="-1" style="background: rgba(0,0,0,0.5);">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title">Cadastrar Equipamento</h5>
+        <button type="button" class="btn-close btn-close-white" (click)="cancel()"></button>
+      </div>
+
+      <div class="modal-body">
+        <form>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Código*</label>
+              <input type="text" [(ngModel)]="equipment.codigo" name="codigo" class="form-control" required>
+            </div>
+
+            <div class="col-md-8">
+              <label class="form-label">Nome do Posto*</label>
+              <input type="text" [(ngModel)]="equipment.nome_posto" name="nome_posto" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Razão de Uso</label>
+              <select [(ngModel)]="equipment.razao_uso" name="razao_uso" class="form-select">
+                <option value="">Selecione...</option>
+                <option>Abastece</option>
+                <option>Estacione</option>
+                <option>Concessionária</option>
+                <option>Drive</option>
+              </select>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Versão da Solução*</label>
+              <input type="text" [(ngModel)]="equipment.vs_solucao" name="vs_solucao" class="form-control" required>
+            </div>
+
+            <div class="col-12">
+              <label class="form-label">Motivo da Homologação*</label>
+              <input type="text" [(ngModel)]="equipment.motivo_homologacao" name="motivo_homologacao" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Data Limite*</label>
+              <input type="date" [(ngModel)]="equipment.data_limite_homologacao" name="data_limite_homologacao" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Responsável*</label>
+              <input type="text" [(ngModel)]="equipment.responsavel" name="responsavel" class="form-control" required>
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label">Status</label>
+              <select [(ngModel)]="equipment.status_equip" name="status_equip" class="form-select">
+                <option>Em homologação</option>
+                <option>Aprovado</option>
+                <option>Reprovado</option>
+              </select>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="cancel()">Cancelar</button>
+        <button type="button" class="btn btn-success" (click)="save()">Salvar</button>
+      </div>
+    </div>
+  </div>
+</div>

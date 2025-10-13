@@ -1,4 +1,4 @@
-<header class="d-flex align-items-center justify-content-between py-3 border-bottom bg-light px-4">
+<header class="header d-flex align-items-center justify-content-between py-3 border-bottom bg-light px-4">
     <div class="d-flex align-items-center gap-3">
         <img src="/assets/images/sp-dark.png" height="60" alt="Logo Sem Parar">
         <h1>
@@ -8,7 +8,15 @@
         </h1>
     </div>
     <div class="text-end">
-        <span class="fw-semibold me-3 text-dark">👤 {{ user.name }}</span>
-        <a href="/auth/logout" class="btn btn-outline-danger btn-sm">Sair</a>
+        <span class="fw-semibold me-3 text-dark">
+          <i class="bi bi-person-circle me-1"></i>
+          <strong>{{ user.name }}</strong>
+        </span>
+
+        <a href="/auth/logout" class="btn btn-outline-danger btn-sm">
+          Sair
+          <i class="bi bi-box-arrow-right p-1"></i>
+        </a>
+
     </div>
 </header>

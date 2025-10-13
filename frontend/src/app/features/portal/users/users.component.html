@@ -6,7 +6,7 @@
   <h2>Gestão de Usuários</h2>
 
   <div *ngIf="isAdmin()" class="mb-3">
-    <button class="btn btn-success" (click)="newUser()">
+    <button class="btn btn-success" (click)="openCreateUserModal()">
       <i class="bi bi-person-plus"></i>
       Novo Usuário
     </button>
@@ -17,16 +17,16 @@
       <thead class="table-dark">
         <tr class="text-center">
           <th>ID</th>
-          <th>Username</th>
+          <th>Nome</th>
           <th>Email</th>
-          <th>Role</th>
+          <th>Permissão</th>
           <th>Ações</th>
         </tr>
       </thead>
       <tbody>
         <tr *ngFor="let u of users" class="text-center">
           <td>{{ u.id }}</td>
-          <td>{{ u.username }}</td>
+          <td>{{ u.name }}</td>
           <td>{{ u.email }}</td>
           <td>
             <span *ngIf="u.role.toLowerCase() === 'admin'; else notAdmin" class="badge bg-primary">Admin</span>
@@ -39,7 +39,7 @@
               <button
                 class="btn btn-sm btn-danger"
                 *ngIf="isAdmin()"
-                (click)="deleteUser(u.id)"
+                (click)="confirmDelete(u.id)"
               >
                 <i class="bi bi-trash3"></i>
                 Excluir
@@ -47,15 +47,21 @@
               <button
                 class="btn btn-sm btn-primary"
                 *ngIf="isAdmin()"
-                (click)="editUser(u.id)"
-              >
-                <i class="bi bi-person-plus"></i>
+                (click)="editUser(u)">
+                <i class="bi bi-pencil"></i>
                 Editar
               </button>
+
             </div>
           </td>
         </tr>
       </tbody>
     </table>
   </div>
+  <app-user-modal
+    *ngIf="showUserModal"
+    (onSave)="createUser($event)"
+    (onCancel)="showUserModal = false">
+  </app-user-modal>
 </section>
+

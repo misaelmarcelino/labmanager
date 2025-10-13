@@ -31,6 +31,7 @@ export class AuthService {
     }>('auth/login', { email, password }).pipe(
       tap(response => {
         localStorage.setItem('auth_token', response.access_token);
+    
         const user: User = {
           email: response.email,
           name: response.name,

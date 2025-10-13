@@ -1,1 +1,92 @@
-<p>modal works!</p>
+<!-- 🔹 Fundo do modal -->
+<div class="modal-backdrop" *ngIf="visible" (click)="cancel()"></div>
+
+<!-- 🔹 Container do modal -->
+<div class="modal-container" *ngIf="visible">
+  <div class="modal-box animate-in" [ngClass]="config.type">
+
+    <!-- 🔹 Cabeçalho -->
+    <header class="modal-header">
+      <h3 class="modal-title">{{ config.title }}</h3>
+      <button type="button" class="btn-close" (click)="cancel()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+
+    <!-- 🔹 Corpo -->
+    <section class="modal-body">
+      <ng-container [ngSwitch]="config.type">
+
+        <!-- 🔸 Info -->
+        <p *ngSwitchCase="'info'" class="modal-message">
+          {{ config.message }}
+        </p>
+
+        <!-- 🔸 Confirm -->
+        <p *ngSwitchCase="'confirm'" class="modal-message">
+          {{ config.message }}
+        </p>
+
+        <!-- 🔸 Formulário -->
+        <form *ngSwitchCase="'form'" [formGroup]="form" class="form-grid" (ngSubmit)="confirm()">
+
+          <label for="name">Nome:</label>
+          <input id="name" type="text" formControlName="name" placeholder="Digite o nome" />
+
+          <label for="email">Email:</label>
+          <input id="email" type="email" formControlName="email" placeholder="Digite o email" />
+
+          <label for="role">Função:</label>
+          <select id="role" formControlName="role">
+            <option value="admin">Administrador</option>
+            <option value="user">Usuário</option>
+          </select>
+
+          <!-- 🔹 Mensagens de erro -->
+          <div class="form-errors" *ngIf="form.invalid && (form.touched || form.dirty)">
+            <small *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
+              O nome é obrigatório.
+            </small>
+            <small *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
+              Email inválido.
+            </small>
+          </div>
+        </form>
+      </ng-container>
+    </section>
+
+    <!-- 🔹 Rodapé -->
+    <footer class="modal-actions">
+      <button type="button" class="btn-cancel" (click)="cancel()">
+        <i class="bi bi-x-circle"></i>
+        Cancelar
+      </button>
+
+      <button
+        *ngIf="config.type === 'form'"
+        type="submit"
+        class="btn-confirm"
+        [disabled]="form.invalid"
+        (click)="confirm()">
+        <i class="bi bi-check-circle"></i>
+        Salvar
+      </button>
+
+      <button
+        *ngIf="config.type === 'confirm'"
+        class="btn-confirm"
+        (click)="confirm()">
+        <i class="bi bi-check-circle"></i>
+        Confirmar
+      </button>
+
+      <button
+        *ngIf="config.type === 'info'"
+        class="btn-ok"
+        (click)="cancel()">
+        <i class="bi bi-check2-circle"></i>
+        Fechar
+      </button>
+    </footer>
+  </div>
+</div>

@@ -3,11 +3,12 @@ import { Equipment } from '../../../core/model/equipment.model';
 import { EquipmentsService } from '../../../core/services/equipments.service';
 import { AuthService } from '../../../core/services/auth.service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { EquipmentModalComponent } from '../../../shared/modal/equipment-modal/equipment-modal.component';
 
 @Component({
   selector: 'app-equipments',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, EquipmentModalComponent],
   templateUrl: './equipments.component.html',
   styleUrls: ['./equipments.component.scss']
 })
@@ -15,6 +16,7 @@ export class EquipmentsComponent implements OnInit {
   equipamentos: Equipment[] = [];
   errorMessage: string | null = null;
   userRole: string | null = null;
+  showEquipmentModal = false;
 
   constructor(
     private auth: AuthService,
@@ -38,7 +40,10 @@ export class EquipmentsComponent implements OnInit {
       }
     });
   }
-  newEquipment(): void {
+
+  newEquipment(equipmentData: any) {
+    console.log('Novo equipamento:', equipmentData);
+    this.showEquipmentModal = false;
     // lógica para abrir modal ou navegar para rota de novo equipamento
   }
   isAdmin(): boolean {
@@ -59,4 +64,6 @@ export class EquipmentsComponent implements OnInit {
       }
     });
   }
+
+
 }

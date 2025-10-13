@@ -6,9 +6,13 @@ import { ApiService } from './api.service';
 
 export interface User {
   id: number;
-  username: string;
+  name: string;
   email: string;
   role: string;
+}
+export interface CreateUserResponse {
+  message: string;
+  user: User;
 }
 
 @Injectable({
@@ -25,8 +29,8 @@ export class UsersService {
     return this.api.get<User>(`users/${id}`);
   }
 
-  create(user: Omit<User, 'id'>): Observable<User> {
-    return this.api.post<User>('users', user);
+  create(user: Omit<User, 'id'>): Observable<CreateUserResponse> {
+    return this.api.post<CreateUserResponse>('users', user);
   }
 
   update(id: number, user: Partial<User>): Observable<User> {

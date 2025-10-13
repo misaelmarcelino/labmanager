@@ -1,5 +1,5 @@
 <div class="sidebar">
-  <nav class="navbar bg-dark text-white vh-100 p-3">
+  <nav class="navbar text-white">
     <ul class="nav flex-column">
         <li class="nav-item mb-2">
             <a routerLink="/portal/dashboard" class="nav-link text-white">
@@ -33,6 +33,12 @@
         </li>
 
     </ul>
+
   </nav>
-  <button type="button" class="btn btn-danger mt-4 w-100" (click)="logout()">Sair</button>
+
+  <button type="button" class="btn btn-danger" (click)="logout()">
+    Sair
+    <i class="bi bi-box-arrow-right p-1"></i>
+  </button>
+
 </div>

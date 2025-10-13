@@ -1,4 +1,4 @@
-<main class="content flex-grow-1 p-4">
+<section class="content flex-grow-1 p-4">
   <div class="container mt-4">
     <div *ngIf="errorMessage" class="alert alert-danger">
       {{ errorMessage }}
@@ -6,8 +6,8 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
       <h3 class="text-primary fw-bold">Homologação Sem Parar</h3>
-      <div *ngIf="isAdmin()">
-        <button class="btn btn-success" (click)="newEquipment()">
+      <!-- <div *ngIf="isAdmin()"> -->
+        <button class="btn btn-success" (click)="showEquipmentModal = true">
           <i class="bi bi-plus-square"></i>
           Novo Equipamento
         </button>
@@ -20,7 +20,7 @@
           <i class="bi bi-filetype-xlsx"></i>
           XLSX
         </a>
-      </div>
+      <!-- </div> -->
     </div>
 
     <div *ngIf="equipamentos.length > 0; else noEquipment">
@@ -78,5 +78,9 @@
     </ng-template>
   </div>
 
-  <!-- modal de equipamento (se você for usar modal) pode ser incluído aqui como componente Angular -->
-</main>
+</section>
+<app-equipment-modal
+  *ngIf="showEquipmentModal"
+  (onSave)="newEquipment($event)"
+  (onCancel)="showEquipmentModal = false">
+</app-equipment-modal>
