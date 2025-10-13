@@ -30,27 +30,57 @@
         <!-- 🔸 Formulário -->
         <form *ngSwitchCase="'form'" [formGroup]="form" class="form-grid" (ngSubmit)="confirm()">
 
-          <label for="name">Nome:</label>
-          <input id="name" type="text" formControlName="name" placeholder="Digite o nome" />
+          <!-- 🔹 Formulário de Usuário -->
+          <ng-container *ngIf="config.entityType === 'user'">
 
-          <label for="email">Email:</label>
-          <input id="email" type="email" formControlName="email" placeholder="Digite o email" />
+            <label>Nome:</label>
+            <input formControlName="name" placeholder="Digite o nome" />
 
-          <label for="role">Função:</label>
-          <select id="role" formControlName="role">
-            <option value="admin">Administrador</option>
-            <option value="user">Usuário</option>
-          </select>
+            <label>Email:</label>
+            <input formControlName="email" placeholder="Digite o email" />
 
-          <!-- 🔹 Mensagens de erro -->
-          <div class="form-errors" *ngIf="form.invalid && (form.touched || form.dirty)">
-            <small *ngIf="form.get('name')?.invalid && form.get('name')?.touched">
-              O nome é obrigatório.
-            </small>
-            <small *ngIf="form.get('email')?.invalid && form.get('email')?.touched">
-              Email inválido.
-            </small>
-          </div>
+            <label>Função:</label>
+            <select formControlName="role">
+              <option value="ADMIN">Administrador</option>
+              <option value="USER">Usuário</option>
+            </select>
+          </ng-container>
+
+          <!-- 🔹 Formulário de Equipamento -->
+          <ng-container *ngIf="config.entityType === 'equipment'">
+            <label>Código:</label>
+            <input formControlName="codigo" placeholder="Digite o código do posto" />
+            <label>Posto:</label>
+            <input formControlName="nome_do_posto" placeholder="Digite o nome do posto" />
+
+            <label>Razão de Uso:</label>
+            <select formControlName="razao_uso">
+              <option value="ABASTECE">Abastece</option>
+              <option value="ESTACIONE">Estacione</option>
+              <option value="DRIVE">Drive</option>
+              <option value="CONCESSIONARIA">Concessionária</option>
+              <option value="OUTROS">Outros</option>
+            </select>
+
+            <label>Versão da Solução:</label>
+            <input formControlName="versao_solucao" placeholder="Digite a versão da solução" />
+
+            <label>Descrição:</label>
+            <input formControlName="descricao" placeholder="Digite uma breve descricao de homologação" />
+
+            <label>Data Limite:</label>
+            <input type="date" formControlName="data_limite" />
+
+            <label>Responsável:</label>
+            <input formControlName="responsavel" placeholder="Responsável pelo equipamento" />
+
+            <label>Status:</label>
+            <select formControlName="status">
+              <option value="PENDENTE">Pendente</option>
+              <option value="APROVADO">Aprovado</option>
+              <option value="REPROVADO">Reprovado</option>
+            </select>
+          </ng-container>
         </form>
       </ng-container>
     </section>

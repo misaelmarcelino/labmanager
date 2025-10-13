@@ -45,24 +45,30 @@ export class ModalComponent {
 
   /** 🔹 Inicializa o formulário com dados de edição */
   private initializeForm(data: any = {}): void {
-    this.form = new FormGroup({
-      name: new FormControl(data.name ?? '', Validators.required),
-      email: new FormControl(data.email ?? '', [Validators.required, Validators.email]),
-      role: new FormControl(data.role ?? '', Validators.required)
-    });
+    console.log('🧩 Tipo de entidade recebido:', this.config.entityType);
 
-    // 🔹 aplica os valores dinamicamente (preenche campos)
-    if (data) {
-      this.form.patchValue({
-        name: data.name ?? '',
-        email: data.email ?? '',
-        role: data.role.toUpperCase() ?? ''
+    if (this.config.entityType === 'equipment') {
+      this.form = new FormGroup({
+        codigo: new FormControl(data.codigo ?? '', Validators.required),
+        nome_do_posto: new FormControl(data.nome_do_posto ?? '', Validators.required),
+        razao_uso: new FormControl(data.razao_uso ?? '', Validators.required),
+        versao_solucao: new FormControl(data.versao_solucao ?? '', Validators.required),
+        descricao: new FormControl(data.descricao ?? '', Validators.required),
+        data_limite: new FormControl(data.data_limite ?? '', Validators.required),
+        responsavel: new FormControl(data.responsavel ?? '', Validators.required),
+        status: new FormControl(data.status ?? 'PENDENTE', Validators.required)
+      });
+    } else {
+      // fallback: usuário
+      this.form = new FormGroup({
+        name: new FormControl(data.name ?? '', Validators.required),
+        email: new FormControl(data.email ?? '', [Validators.required, Validators.email]),
+        role: new FormControl((data.role ?? 'USER').toUpperCase())
       });
     }
-
-    // 🔹 força o Angular a detectar os novos valores na view
-    this.cdr.detectChanges();
   }
+
+
 
   /** 🔹 Confirma a ação (envia dados se for form) */
   confirm(): void {

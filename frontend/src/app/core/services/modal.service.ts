@@ -5,10 +5,13 @@ export interface ModalConfig {
   title?: string;
   message?: string;
   type?: 'info' | 'confirm' | 'form';
+  entityType?: 'user' | 'equipment'; 
   data?: any;
   onConfirm?: (data?: any) => void;
   onCancel?: () => void;
 }
+
+
 
 
 @Injectable({ providedIn: 'root' })

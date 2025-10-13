@@ -23,11 +23,11 @@
           <tbody>
             <tr *ngFor="let eq of equipamentos">
               <td>{{ eq.codigo }}</td>
-              <td>{{ eq.nome_posto }}</td>
+              <td>{{ eq.nome_do_posto }}</td>
               <td>{{ eq.razao_uso || '-' }}</td>
-              <td>{{ eq.vs_solucao }}</td>
-              <td>{{ eq.motivo_homologacao }}</td>
-              <td>{{ eq.data_limite_homologacao ? (eq.data_limite_homologacao | date:'dd/MM/yyyy') : '-' }}</td>
+              <td>{{ eq.versao_solucao }}</td>
+              <td>{{ eq.descricao }}</td>
+              <td>{{ eq.data_limite ? (eq.data_limite | date:'dd/MM/yyyy') : '-' }}</td>
               <td>{{ eq.responsavel }}</td>
               <td>
                 <span

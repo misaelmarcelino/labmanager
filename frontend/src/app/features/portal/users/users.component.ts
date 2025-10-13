@@ -4,8 +4,6 @@ import { RouterModule } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 import { UsersService } from '../../../core/services/users.service';
-import { UserModalComponent } from '../../../shared/modal/user-modal/user-modal.component';
-import { ModalComponent } from '../../../shared/modal/modal.component';
 import { ModalService } from '../../../core/services/modal.service';
 
 export interface User {
@@ -18,7 +16,7 @@ export interface User {
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, RouterModule, UserModalComponent,],
+  imports: [CommonModule, RouterModule],
   templateUrl: './users.component.html',
   styleUrls: ['./users.component.scss']
 })
@@ -26,7 +24,6 @@ export class UsersComponent implements OnInit {
   users: User[] = [];
   errorMessage: string | null = null;
   userRole: string | null = null;
-  showUserModal = false;
 
   constructor(
     private auth: AuthService,
@@ -35,16 +32,15 @@ export class UsersComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    const u = this.auth.user;
-    this.userRole = u ? u.role : null;
+    const user = this.auth.user;
+    this.userRole = user ? user.role : null;
     this.loadUsers();
   }
 
+  /** 🔹 Carrega todos os usuários */
   loadUsers(): void {
     this.usersService.listAll().subscribe({
-      next: (usr) => {
-        this.users = usr;
-      },
+      next: (usr) => (this.users = usr),
       error: (err) => {
         console.error('Erro ao buscar usuários:', err);
         this.errorMessage = 'Não foi possível carregar usuários.';
@@ -52,41 +48,30 @@ export class UsersComponent implements OnInit {
     });
   }
 
-
-  // createUser(newUser: { name: string; email: string; role: string }): void {
-  //   this.usersService.create(newUser).subscribe({
-  //     next: (response) => {
-  //       console.log('Usuário criado:', response);
-  //       this.showUserModal = false;
-  //       this.loadUsers();
-  //       alert('✅ Usuário cadastrado com sucesso!');
-  //     },
-  //     error: (err) => {
-  //       console.error('Erro ao salvar usuário:', err);
-  //       this.errorMessage = 'Erro ao salvar usuário.';
-  //     }
-  //   });
-  // }
-  openCreateUserModal() {
+  /** 🔹 Abrir modal para novo usuário */
+  openCreateUserModal(): void {
     this.modalService.open({
       title: 'Novo Usuário',
       type: 'form',
-      data: {}, // formulário vazio
+      entityType: 'user', // 👈 define tipo
+      data: {}, // vazio
       onConfirm: (newUser) => this.createUser(newUser)
     });
   }
 
-  /** 🔹 Cria novo usuário */
+  /** 🔹 Criar novo usuário */
   createUser(newUser: { name: string; email: string; role: string }): void {
     const payload = {
       ...newUser,
-      role: newUser.role?.toUpperCase() || 'USER' // garante padrão válido
+      role: newUser.role?.toUpperCase() || 'USER'
     };
 
     this.usersService.create(payload).subscribe({
       next: (response) => {
         console.log('✅ Usuário criado:', response);
         this.loadUsers();
+
+        // Mensagem de sucesso
         this.modalService.open({
           title: 'Sucesso!',
           message: 'Usuário cadastrado com sucesso!',
@@ -100,27 +85,38 @@ export class UsersComponent implements OnInit {
     });
   }
 
-
-  editUser(user: any) {
+  /** 🔹 Editar usuário existente */
+  editUser(user: User): void {
     this.modalService.open({
       title: 'Editar Usuário',
       type: 'form',
-      data: user, // 👈 importante!
+      entityType: 'user', // 👈 define tipo
+      data: user,
       onConfirm: (updated) => this.updateUser(user.id, updated)
     });
   }
 
-  updateUser(id: number, data: any) {
-    console.log(`Usuário ${id} atualizado:`, data);
-    const index = this.users.findIndex(u => u.id === id);
-    if (index !== -1) this.users[index] = { ...this.users[index], ...data };
+  /** 🔹 Atualiza dados do usuário */
+  updateUser(id: number, data: any): void {
+    const payload = {
+      ...data,
+      role: data.role?.toUpperCase() || 'USER'
+    };
+
+    this.usersService.update(id, payload).subscribe({
+      next: () => {
+        console.log(`Usuário ${id} atualizado.`);
+        this.loadUsers();
+      },
+      error: (err) => {
+        console.error('Erro ao atualizar usuário:', err);
+        this.errorMessage = 'Erro ao atualizar usuário.';
+      }
+    });
   }
 
-  isAdmin(): boolean {
-    return this.userRole?.toLowerCase() === 'admin';
-  }
-
-  confirmDelete(userId: number) {
+  /** 🔹 Confirmar exclusão */
+  confirmDelete(userId: number): void {
     this.modalService.open({
       title: 'Excluir Usuário',
       message: 'Tem certeza que deseja excluir este usuário?',
@@ -128,12 +124,11 @@ export class UsersComponent implements OnInit {
       onConfirm: () => this.deleteUser(userId)
     });
   }
-  deleteUser(id: number) {
-    console.log('🗑️ Usuário excluído:', id);
+
+  /** 🔹 Excluir usuário */
+  deleteUser(id: number): void {
     this.usersService.delete(id).subscribe({
-      next: () => {
-        this.loadUsers();
-      },
+      next: () => this.loadUsers(),
       error: (err) => {
         console.error('Erro ao excluir usuário:', err);
         this.errorMessage = 'Erro ao excluir usuário.';
@@ -141,11 +136,8 @@ export class UsersComponent implements OnInit {
     });
   }
 
-  showInfo() {
-    this.modalService.open({
-      title: 'Informação',
-      message: 'Usuário criado com sucesso!',
-      type: 'info'
-    });
+  /** 🔹 Verifica se usuário logado é admin */
+  isAdmin(): boolean {
+    return this.userRole?.toLowerCase() === 'admin';
   }
 }
