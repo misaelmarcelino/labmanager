@@ -1,6 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { PortalComponent } from './portal.component';
+import { PortalComponent } from '../../core/model/equipment.model';
 
 describe('PortalComponent', () => {
   let component: PortalComponent;
@@ -11,7 +11,7 @@ describe('PortalComponent', () => {
       imports: [PortalComponent]
     })
     .compileComponents();
-    
+
     fixture = TestBed.createComponent(PortalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

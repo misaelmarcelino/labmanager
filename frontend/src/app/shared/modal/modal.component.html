@@ -1,11 +1,8 @@
-<!-- 🔹 Fundo do modal -->
 <div class="modal-backdrop" *ngIf="visible" (click)="cancel()"></div>
 
-<!-- 🔹 Container do modal -->
 <div class="modal-container" *ngIf="visible">
   <div class="modal-box animate-in" [ngClass]="config.type">
 
-    <!-- 🔹 Cabeçalho -->
     <header class="modal-header">
       <h3 class="modal-title">{{ config.title }}</h3>
       <button type="button" class="btn-close" (click)="cancel()">
@@ -13,16 +10,12 @@
       </button>
     </header>
 
-    <!-- 🔹 Corpo -->
     <section class="modal-body">
       <ng-container [ngSwitch]="config.type">
 
-        <!-- 🔸 Info -->
         <p *ngSwitchCase="'info'" class="modal-message">
           {{ config.message }}
         </p>
-
-        <!-- 🔸 Confirm -->
         <p *ngSwitchCase="'confirm'" class="modal-message">
           {{ config.message }}
         </p>
@@ -85,7 +78,6 @@
       </ng-container>
     </section>
 
-    <!-- 🔹 Rodapé -->
     <footer class="modal-actions">
       <button type="button" class="btn-cancel" (click)="cancel()">
         <i class="bi bi-x-circle"></i>

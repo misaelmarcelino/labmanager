@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { authGuard } from './core/auth.guard';
 import { PortalComponent } from './features/portal/portal.component';
 
+
 export const routes: Routes = [
   {
     path: 'login',

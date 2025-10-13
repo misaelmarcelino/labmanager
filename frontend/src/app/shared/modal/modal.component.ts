@@ -59,7 +59,6 @@ export class ModalComponent {
         status: new FormControl(data.status ?? 'PENDENTE', Validators.required)
       });
     } else {
-      // fallback: usuário
       this.form = new FormGroup({
         name: new FormControl(data.name ?? '', Validators.required),
         email: new FormControl(data.email ?? '', [Validators.required, Validators.email]),
