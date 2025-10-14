@@ -43,6 +43,10 @@ STATIC_DIR = os.path.join(BASE_DIR, "..", "static")    # backend/static
 async def angular_spa_handler(request: Request, call_next):
     path = request.url.path
 
+     # 🔹 Evitar interceptar rotas internas do FastAPI
+    if path.startswith(("/docs", "/redoc", "/openapi.json")):
+        return await call_next(request)
+
     # 🔹 Se a rota começar com /api, deixa o backend responder
     if path.startswith("/api"):
         return await call_next(request)
