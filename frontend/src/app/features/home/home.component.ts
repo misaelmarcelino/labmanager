@@ -3,11 +3,12 @@ import { Equipment } from '../../core/model/equipment.model';
 import { EquipmentsService } from '../../core/services/equipments.service';
 import { AuthService } from '../../core/services/auth.service';
 import { CommonModule, DatePipe } from '@angular/common';
+import { HeaderComponent } from '../../shared/header/header.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, DatePipe],
+  imports: [CommonModule, DatePipe, HeaderComponent],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
