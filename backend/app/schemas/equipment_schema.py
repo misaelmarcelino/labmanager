@@ -45,7 +45,10 @@ class EquipmentUpdate(BaseModel):
     data_limite: Optional[date] = None
     responsavel: Optional[str] = None
     status: Optional[EquipmentStatus] = None
-
+    is_active: Optional[bool] = None
+    
+    
+    
 
 # 🔹 Resposta
 class EquipmentResponse(EquipmentBase):

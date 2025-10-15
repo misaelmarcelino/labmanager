@@ -1,5 +1,5 @@
 import secrets, string
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Response, status
 from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import List
@@ -119,7 +119,6 @@ def update_user(
     return user
 
 
-# 🔹 Deletar usuário
 @router.delete("/{user_id}", status_code=status.HTTP_204_NO_CONTENT, summary="Excluir usuário (apenas admin)")
 def delete_user(
     user_id: int,
@@ -132,7 +131,8 @@ def delete_user(
 
     db.delete(user)
     db.commit()
-    return JSONResponse(status_code=204, content={"message": "Usuário removido com sucesso"})
+    return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 
 # 🔹 Atualizar o próprio perfil

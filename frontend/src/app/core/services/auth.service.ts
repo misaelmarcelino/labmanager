@@ -21,28 +21,32 @@ export class AuthService {
   constructor(private api: ApiService, private router: Router) {}
 
   login(email: string, password: string): Observable<User> {
-    // usar ApiService.post para chamar “auth/login”
     return this.api.post<{
       access_token: string;
       email: string;
       name: string;
       role: string;
       token_type: string;
+      is_first_access: boolean; // 👈 backend agora retorna este campo
     }>('auth/login', { email, password }).pipe(
       tap(response => {
         localStorage.setItem('auth_token', response.access_token);
-    
+
         const user: User = {
           email: response.email,
           name: response.name,
-          role: response.role
+          role: response.role,
+          is_first_access: response.is_first_access // 👈 salva no estado
         };
+        sessionStorage.setItem('old_password', password);
+
         this._user.set(user);
       }),
       map(response => ({
         email: response.email,
         name: response.name,
-        role: response.role
+        role: response.role,
+        is_first_access: response.is_first_access // 👈 retorna também
       }))
     );
   }
@@ -63,9 +67,19 @@ export class AuthService {
   }
 
   resetPassword(token: string, newPassword: string): Observable<any> {
-    return this.api.post<any>('auth/reset-password', {
+    return this.api.post<any>('auth/reset-password/confirm', {
       token,
       new_password: newPassword
     });
   }
+
+  // src/app/core/services/auth.service.ts
+  changePassword(oldPassword: string, newPassword: string): Observable<any> {
+    return this.api.put<any>('auth/change-password', {
+      old_password: oldPassword,
+      new_password: newPassword
+    });
+  }
+
+
 }

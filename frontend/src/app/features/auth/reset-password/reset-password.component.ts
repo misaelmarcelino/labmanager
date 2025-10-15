@@ -2,7 +2,6 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
@@ -10,62 +9,60 @@ import { AuthService } from '../../../core/services/auth.service';
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.scss'
+  styleUrls: ['./reset-password.component.scss']
 })
 export class ResetPasswordComponent {
+  oldPassword = ''; // 👈 senha antiga
   newPassword = '';
   confirmPassword = '';
+  email = '';
   errorMessage: string | null = null;
   successMessage: string | null = null;
   loading = false;
 
   private token: string | null = null;
+  private isFirstAccess = false;
 
   constructor(
     private auth: AuthService,
     private route: ActivatedRoute,
     private router: Router
-  ) {
-    // Recupera o token da URL, se for passado como parâmetro de rota ou query
-    this.route.queryParams.subscribe(params => {
-      this.token = params['token'] || null;
-    });
+  ) {}
+
+  ngOnInit(): void {
+  this.route.queryParams.subscribe(params => {
+    this.token = params['token'] || null;
+    this.email = params['email'] || '';
+    this.isFirstAccess = params['first'] === 'true';
+
+    // 🔹 recupera senha antiga da sessão
+    if (this.isFirstAccess) {
+      this.oldPassword = sessionStorage.getItem('old_password') || '';
+    }
+  });
   }
 
   submit(): void {
-    this.errorMessage = null;
-    this.successMessage = null;
-
-    if (!this.newPassword || !this.confirmPassword) {
-      this.errorMessage = 'Por favor, preencha todos os campos.';
-      return;
-    }
-    if (this.newPassword !== this.confirmPassword) {
-      this.errorMessage = 'As senhas não coincidem.';
-      return;
-    }
-    if (!this.token) {
-      this.errorMessage = 'Token inválido ou expirado.';
-      return;
-    }
-
-    this.loading = true;
-
-    this.auth.resetPassword(this.token, this.newPassword).subscribe({
-      next: () => {
-        this.successMessage = 'Senha redefinida com sucesso! Você será redirecionado para o login.';
-        // opcional: aguardar alguns segundos antes de redirecionar
-        setTimeout(() => {
-          this.router.navigate(['/login']);
-        }, 3000);
-      },
-      error: (err: any) => {
-        console.error('Erro ao redefinir senha:', err);
-        this.errorMessage = 'Erro ao redefinir senha. Tente novamente mais tarde.';
-      },
-      complete: () => {
-        this.loading = false;
+    if (this.isFirstAccess) {
+      if (!this.oldPassword) {
+        this.errorMessage = 'Senha anterior não encontrada. Faça login novamente.';
+        return;
       }
-    });
+
+      this.auth.changePassword(this.oldPassword, this.newPassword).subscribe({
+        next: () => {
+          // limpa senha da sessão
+          sessionStorage.removeItem('old_password');
+          this.successMessage = 'Senha alterada com sucesso! Faça login novamente.';
+          setTimeout(() => this.router.navigate(['/login']), 2000);
+        },
+        error: (err: any) => {
+          console.error('Erro ao alterar senha:', err);
+          this.errorMessage = err.error?.detail || 'Erro ao alterar senha.';
+        },
+        complete: () => (this.loading = false)
+      });
+    }
   }
+
 }

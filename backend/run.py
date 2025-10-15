@@ -47,6 +47,7 @@ def ensure_admin_exists():
                 email="admin@labmanager.com",
                 password=hash_password("admin123"),
                 role=RoleEnum.ADMIN.value,
+                is_first_access=False
             )
             db.add(admin)
             db.commit()

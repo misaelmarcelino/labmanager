@@ -1,14 +1,29 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from app.core.database import get_db
-from app.core.security import verify_password, create_access_token, hash_password, verify_reset_token, create_reset_token
+from app.core.security import (
+    verify_password,
+    create_access_token,
+    hash_password,
+    verify_reset_token,
+    create_reset_token
+)
 from app.core.dependencies import get_current_user
 from app.models.user import User
-from app.schemas.auth_schema import LoginRequest, ChangePasswordRequest, ChangePasswordResponse, PasswordResetRequest, PasswordResetConfirm
+from app.schemas.auth_schema import (
+    LoginRequest,
+    ChangePasswordRequest,
+    ChangePasswordResponse,
+    PasswordResetRequest,
+    PasswordResetConfirm
+)
 from app.services.mail_service import send_reset_password_email
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
+# =========================================================
+# 🔐 LOGIN
+# =========================================================
 @router.post("/login")
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
@@ -30,10 +45,14 @@ def login(request: LoginRequest, db: Session = Depends(get_db)):
         "token_type": "bearer",
         "name": user.name,
         "email": user.email,
-        "role": user.role
+        "role": user.role,
+        "is_first_access": user.is_first_access  # ✅ nome padronizado com o model
     }
 
 
+# =========================================================
+# 🔄 TROCAR SENHA (usuário logado)
+# =========================================================
 @router.put("/change-password", response_model=ChangePasswordResponse)
 def change_password(
     data: ChangePasswordRequest,
@@ -50,11 +69,16 @@ def change_password(
 
     # 3️⃣ Atualiza a senha
     current_user.password = hash_password(data.new_password)
+    current_user.is_first_access = False  # ✅ marca como redefinida
     db.commit()
     db.refresh(current_user)
 
     return {"message": "Senha alterada com sucesso!"}
 
+
+# =========================================================
+# 📧 ESQUECI MINHA SENHA (gera token)
+# =========================================================
 @router.post("/forgot-password", summary="Enviar link de redefinição de senha")
 def reset_password_request(payload: PasswordResetRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == payload.email).first()
@@ -67,6 +91,9 @@ def reset_password_request(payload: PasswordResetRequest, db: Session = Depends(
     return {"message": "E-mail de redefinição enviado com sucesso!"}
 
 
+# =========================================================
+# 🧩 CONFIRMAR REDEFINIÇÃO DE SENHA (com token)
+# =========================================================
 @router.post("/reset-password/confirm", summary="Redefinir senha com token")
 def reset_password_confirm(payload: PasswordResetConfirm, db: Session = Depends(get_db)):
     email = verify_reset_token(payload.token)
@@ -78,5 +105,8 @@ def reset_password_confirm(payload: PasswordResetConfirm, db: Session = Depends(
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
     user.password = hash_password(payload.new_password)
+    user.is_first_access = False  # ✅ redefiniu senha → marca como já acessado
     db.commit()
+    db.refresh(user)
+
     return {"message": "Senha redefinida com sucesso!"}

@@ -5,11 +5,6 @@ import { PortalComponent } from './features/portal/portal.component';
 
 export const routes: Routes = [
   {
-    path: '',
-    loadComponent: () =>
-      import('./features/auth/login/login.component').then(m => m.LoginComponent),
-  },
-  {
     path: 'login',
     loadComponent: () =>
       import('./features/auth/login/login.component').then(m => m.LoginComponent),
