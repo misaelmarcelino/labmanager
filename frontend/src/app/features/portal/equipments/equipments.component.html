@@ -40,9 +40,9 @@
               <td>{{ eq.data_limite ? (eq.data_limite | date:'dd/MM/yyyy') : '-' }}</td>
               <td>{{ eq.responsavel }}</td>
               <td>
-                <span *ngIf="eq.status === 'Aprovado'; else elseStatus" class="badge bg-success">{{ eq.status }}</span>
+                <span *ngIf="eq.status === 'APROVADO'; else elseStatus" class="badge bg-success">{{ eq.status }}</span>
                 <ng-template #elseStatus>
-                  <span *ngIf="eq.status === 'Reprovado'; else pending" class="badge bg-danger">{{ eq.status }}</span>
+                  <span *ngIf="eq.status === 'REPROVADO'; else pending" class="badge bg-danger">{{ eq.status }}</span>
                   <ng-template #pending>
                     <span class="badge bg-warning text-dark">{{ eq.status }}</span>
                   </ng-template>
