@@ -44,7 +44,7 @@ export const routes: Routes = [
     path: 'home',
     loadComponent: () =>
       import('./features/home/home.component').then(m => m.HomeComponent),
-    // canActivate: [authGuard]
+    canActivate: [authGuard]
   },
   {
     path: '**',

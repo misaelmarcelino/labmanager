@@ -75,18 +75,47 @@ def create_user(
         }
     )
 
+# 🔹 Obter informações do próprio perfil
+@router.get("/me", response_model=UserResponse, summary="Obter informações do próprio perfil")
+def get_own_profile(current_user: User = Depends(get_current_user)):
+    """
+    Retorna as informações do colaborador autenticado com base no token JWT.
+    """
+    return current_user
 
-# 🔹 Buscar usuário por ID
-@router.get("/{user_id}", response_model=UserResponse, summary="Buscar usuário por ID")
-def get_user(
-    user_id: int,
+# 🔹 Atualizar o próprio perfil
+@router.put("/me", response_model=UserResponse, summary="Atualizar o próprio perfil")
+def update_own_profile(
+    user_data: UserSelfUpdate,
     db: Session = Depends(get_db),
-    _: User = Depends(require_admin)
+    current_user: User = Depends(get_current_user)
 ):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="Usuário não encontrado")
-    return user
+    if user_data.name:
+        current_user.name = user_data.name
+    if user_data.email:
+        existing = db.query(User).filter(User.email == user_data.email, User.id != current_user.id).first()
+        if existing:
+            raise HTTPException(status_code=400, detail="E-mail já está em uso")
+        current_user.email = user_data.email
+    if user_data.password:
+        current_user.password = hash_password(user_data.password)
+
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+
+
+# # 🔹 Buscar usuário por ID
+# @router.get("/{user_id}", response_model=UserResponse, summary="Buscar usuário por ID")
+# def get_user(
+#     user_id: int,
+#     db: Session = Depends(get_db),
+#     _: User = Depends(require_admin)
+# ):
+#     user = db.query(User).filter(User.id == user_id).first()
+#     if not user:
+#         raise HTTPException(status_code=404, detail="Usuário não encontrado")
+#     return user
 
 
 # 🔹 Atualizar usuário (ADMIN)
@@ -132,6 +161,7 @@ def delete_user(
     db.delete(user)
     db.commit()
     return Response(status_code=status.HTTP_204_NO_CONTENT)
+
 
 
 

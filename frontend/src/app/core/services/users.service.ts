@@ -40,4 +40,12 @@ export class UsersService {
   delete(id: number): Observable<void> {
     return this.api.delete<void>(`users/${id}`);
   }
+
+  getProfile(): Observable<User> {
+    return this.api.get<User>('users/me');
+  }
+  
+  updateProfile(data: any): Observable<any> {
+    return this.api.put<any>('users/me', data);
+  }
 }

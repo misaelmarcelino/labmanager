@@ -1,1 +1,112 @@
-<p>settings works!</p>
+<div class="container mt-4 settings-page">
+  <div class="card shadow p-4 mb-4">
+    <h4 class="mb-3">👤 Meu Perfil</h4>
+
+    <form (ngSubmit)="saveProfile()" #profileForm="ngForm">
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="name" class="form-label">Nome</label>
+          <input
+            type="text"
+            id="name"
+            class="form-control"
+            name="name"
+            [(ngModel)]="user.name"
+            required
+          />
+        </div>
+
+        <div class="col-md-6 mb-3">
+          <label for="email" class="form-label">E-mail</label>
+          <input
+            type="email"
+            id="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="user.email"
+            readonly
+          />
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-md-6 mb-3">
+          <label for="role" class="form-label">Função</label>
+          <input
+            type="text"
+            id="role"
+            class="form-control"
+            name="role"
+            [(ngModel)]="user.role"
+            readonly
+          />
+        </div>
+      </div>
+
+      <div class="d-grid mt-3">
+        <button
+          type="submit"
+          class="btn btn-primary"
+          [disabled]="!profileForm.valid || isLoading"
+        >
+          {{ isLoading ? 'Salvando...' : 'Salvar Alterações' }}
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <div class="card shadow p-4">
+    <h4 class="mb-3">🔒 Redefinir Senha</h4>
+
+    <form (ngSubmit)="changePassword()" #passwordForm="ngForm">
+      <div class="row">
+        <div class="col-md-4 mb-3">
+          <label for="currentPassword" class="form-label">Senha Atual</label>
+          <input
+            type="password"
+            id="currentPassword"
+            class="form-control"
+            name="currentPassword"
+            [(ngModel)]="oldPassword"
+            required
+          />
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="newPassword" class="form-label">Nova Senha</label>
+          <input
+            type="password"
+            id="newPassword"
+            class="form-control"
+            name="newPassword"
+            [(ngModel)]="newPassword"
+            required
+            minlength="6"
+          />
+        </div>
+
+        <div class="col-md-4 mb-3">
+          <label for="confirmPassword" class="form-label">Confirmar Nova Senha</label>
+          <input
+            type="password"
+            id="confirmPassword"
+            class="form-control"
+            name="confirmPassword"
+            [(ngModel)]="confirmPassword"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="d-grid mt-3">
+        <button
+          type="submit"
+          class="btn btn-warning"
+          [disabled]="!passwordForm.valid"
+        >
+          Redefinir Senha
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
