@@ -22,6 +22,7 @@ class Settings(BaseSettings):
     # Servidor de e-mail
     SMTP_SERVER: str
     SMTP_PORT: int
+    SMTP_SECURITY: str
     SMTP_USER: str
     SMTP_PASS: str
 
