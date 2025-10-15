@@ -1,16 +1,25 @@
+import os
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
-import os
+
+
 
 from app.core.database import Base, engine
 from app.routers import auth_router, user_router, equipment_router, report_router
+from app.jobs.job_equipments import scheduler, check_expired_equipments
 
 app = FastAPI(title="Lab Manager API")
 
 # 🔹 Criar tabelas se ainda não existirem
 Base.metadata.create_all(bind=engine)
+
+@app.on_event("startup")
+def start_jobs():
+    scheduler.start()
+    check_expired_equipments()  # roda uma vez na inicialização
+
 
 # 🔹 CORS (frontend local e backend servindo build Angular)
 origins = [

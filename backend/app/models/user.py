@@ -14,3 +14,4 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     password = Column(String, nullable=False)
     role = Column(Enum(RoleEnum), default=RoleEnum.USER, nullable=False)
+

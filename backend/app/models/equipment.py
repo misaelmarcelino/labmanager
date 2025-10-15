@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, Integer, String, Enum, Date
+from sqlalchemy import Column, DateTime, Integer, String, Enum, Date, Boolean
 from datetime import datetime
 from app.core.database import Base
 import enum
@@ -24,6 +24,13 @@ class Equipment(Base):
     data_limite = Column(Date, nullable=False)
     responsavel = Column(String, nullable=False)
     status = Column(String, nullable=False)
+    is_active = Column(Boolean, default=True)
 
     created_at = Column(DateTime, default=datetime.utcnow)
     updated_at = Column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
+
+    def deactivate_if_expired(self):
+        if self.data_limite and self.data_limite < datetime.utcnow().date():
+            self.is_active = False
+
+    

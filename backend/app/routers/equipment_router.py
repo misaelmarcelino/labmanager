@@ -1,19 +1,23 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+
 from app.core.database import get_db
 from app.core.dependencies import get_current_user
 from app.schemas.equipment_schema import EquipmentCreate, EquipmentUpdate, EquipmentResponse
 from app.services import equipment_service
-
+from app.models.equipment import Equipment
 
 router = APIRouter(prefix="/equipments", tags=["Equipments"])
 
 
-@router.get("/", response_model=List[EquipmentResponse])
-def list_all(db: Session = Depends(get_db)):
+@router.get("/", response_model=List[EquipmentResponse] )
+def list_all_actives(db: Session = Depends(get_db)):
     return equipment_service.list_equipments(db)
 
+@router.get("/all", response_model=List[EquipmentResponse])
+def list_all_equipments(db: Session = Depends(get_db)):
+    return equipment_service.list_all_equipments(db)
 
 @router.get("/{equipment_id}", response_model=EquipmentResponse)
 def get_one(equipment_id: int, db: Session = Depends(get_db)):
@@ -21,7 +25,6 @@ def get_one(equipment_id: int, db: Session = Depends(get_db)):
     if not equipment:
         raise HTTPException(status_code=404, detail="Equipment not found")
     return equipment
-
 
 @router.post("/", response_model=EquipmentResponse, status_code=status.HTTP_201_CREATED)
 def create(
@@ -39,8 +42,8 @@ def update(equipment_id: int, data: EquipmentUpdate, db: Session = Depends(get_d
     return equipment
 
 
-@router.delete("/{equipment_id}", status_code=status.HTTP_204_NO_CONTENT)
-def delete(equipment_id: int, db: Session = Depends(get_db)):
-    deleted = equipment_service.delete_equipment(db, equipment_id)
-    if not deleted:
-        raise HTTPException(status_code=404, detail="Equipment not found")
+@router.delete("/{equipment_id}", status_code=status.HTTP_200_OK)
+def delete_equipment(equipment_id: int, db: Session = Depends(get_db)):
+    equipment = equipment_service.deactivate_equipment(db, equipment_id)
+    return {"message": "Equipamento desativado com sucesso", "equipment": equipment}
+
