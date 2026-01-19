@@ -1,1 +1,0 @@
-import{Pa as o,Qa as i,_ as n,_a as s,fb as a}from"./chunk-TBSY5OFZ.js";var c=(()=>{class t{static{this.\u0275fac=function(e){return new(e||t)}}static{this.\u0275cmp=n({type:t,selectors:[["app-settings"]],standalone:!0,features:[a],decls:2,vars:0,template:function(e,p){e&1&&(o(0,"p"),s(1,"settings works!"),i())}})}}return t})();export{c as a};

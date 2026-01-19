@@ -1,21 +1,25 @@
 import os
+from pathlib import Path
 import sys
 import uvicorn
 from alembic import command
 from alembic.config import Config
-from app.core.config import settings
+from app.core.config import Settings, get_settings
 from app.core.database import SessionLocal
 from app.models.user import User, RoleEnum
 from app.core.security import hash_password
+
+
+settings = get_settings()
 
 def run_migrations():
     print("🔄 Executando migrações Alembic via API...")
 
     # Detecta se está rodando empacotado
-    if getattr(sys, 'frozen', False):
-        base_dir = sys._MEIPASS  # Pasta temporária onde o PyInstaller extrai os arquivos
+    if getattr(sys, "frozen", False):
+        base_dir = Path(getattr(sys, "_MEIPASS"))
     else:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
+        base_dir = Path(__file__).resolve().parent
 
     alembic_ini = os.path.join(base_dir, "alembic.ini")
 

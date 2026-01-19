@@ -86,7 +86,7 @@ def reset_password_request(payload: PasswordResetRequest, db: Session = Depends(
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
     token = create_reset_token(user.email)
-    send_reset_password_email(user.email, token)
+    send_reset_password_email(user.email, user.name, token)
 
     return {"message": "E-mail de redefinição enviado com sucesso!"}
 

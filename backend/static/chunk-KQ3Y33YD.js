@@ -1,1 +1,0 @@
-import{P as a,i as o}from"./chunk-TBSY5OFZ.js";var s=(()=>{class t{constructor(){this.modalState=new o,this.modalState$=this.modalState.asObservable()}open(e){this.modalState.next(e)}close(){this.modalState.next(null)}static{this.\u0275fac=function(r){return new(r||t)}}static{this.\u0275prov=a({token:t,factory:t.\u0275fac,providedIn:"root"})}}return t})();export{s as a};

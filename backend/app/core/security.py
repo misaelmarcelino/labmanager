@@ -1,9 +1,10 @@
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from app.core.config import settings
+from app.core.config import get_settings
 
-RESET_SECRET_KEY = settings.SECRET_KEY  # você pode criar outro se quiser
+settings = get_settings()
+RESET_SECRET_KEY = settings.SECRET_KEY
 RESET_ALGORITHM = "HS256"
 RESET_TOKEN_EXPIRE_MINUTES = 15
 
@@ -15,7 +16,7 @@ def hash_password(password: str) -> str:
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
-def create_access_token(data: dict, expires_delta: int = None):
+def create_access_token(data: dict, expires_delta: int | None = None) -> str:
     to_encode = data.copy()
     expire = datetime.utcnow() + timedelta(minutes=expires_delta or settings.ACCESS_TOKEN_EXPIRE_MINUTES)
     to_encode.update({"exp": expire})

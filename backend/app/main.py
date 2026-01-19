@@ -7,10 +7,17 @@ from fastapi.staticfiles import StaticFiles
 
 
 from app.core.database import Base, engine
+from app.core.config import get_settings
 from app.routers import auth_router, user_router, equipment_router, report_router
 from app.jobs.job_equipments import scheduler, check_expired_equipments
 
-app = FastAPI(title="Lab Manager API")
+settings = get_settings()
+
+app = FastAPI(
+    title=settings.APP_NAME,
+    version=settings.APP_VERSION,
+    debug=settings.DEBUG,
+)
 
 # 🔹 Criar tabelas se ainda não existirem
 Base.metadata.create_all(bind=engine)
@@ -22,9 +29,11 @@ def start_jobs():
 
 
 # 🔹 CORS (frontend local e backend servindo build Angular)
-origins = [
-    "http://localhost:4200",  # ambiente Angular dev
-    "http://localhost:5000",  # build Angular servido pelo backend
+origins = ["*"
+    # "http://localhost:4200",  # ambiente Angular dev
+    # "http://localhost:5000",  # build Angular servido pelo backend
+    # "http://127.0.0.1:4200", 
+    # "http://127.0.0.1:5000" 
 ]
 app.add_middleware(
     CORSMiddleware,

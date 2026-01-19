@@ -1,8 +1,9 @@
 import os
 from jinja2 import Environment, FileSystemLoader, select_autoescape
 from app.core.mailer import send_email
-from app.core.config import settings
+from app.core.config import get_settings
 
+settings = get_settings()
 # Caminho dos templates HTML
 TEMPLATE_DIR = os.path.join(os.path.dirname(__file__), "..", "templates", "emails")
 
@@ -35,12 +36,13 @@ def send_welcome_email(email: str, name: str, temp_password: str):
     send_email(to=email, subject=subject, body=html_body)
 
 
-def send_reset_password_email(email: str, token: str):
+def send_reset_password_email(email: str, name: str, token: str):
     subject = "🔐 Redefinição de Senha - Lab Manager"
     reset_link = f"{settings.FRONTEND_URL}/redefinir-senha?token={token}"
 
     html_body = render_template(
         "reset_password.html",
+        name=name,
         reset_link=reset_link
     )
     send_email(to=email, subject=subject, body=html_body)
@@ -56,7 +58,7 @@ def send_new_equipment_email(recipients: list[str], codigo: str, nome_posto: str
         versao_solucao=versao_solucao,
         descricao=descricao,
         data_limite=data_limite,
-        portal_link=f"{settings.BACKEND_URL}/portal/equipamentos"
+        portal_link=f"{settings.URL}/portal/equipamentos"
     )
 
     for email in recipients:
