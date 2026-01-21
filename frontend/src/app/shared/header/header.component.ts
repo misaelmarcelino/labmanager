@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class HeaderComponent implements OnInit {
     role: ''
   };
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     const authUser = this.auth.user;
@@ -37,6 +37,8 @@ export class HeaderComponent implements OnInit {
 
   logout(): void {
     this.auth.logout();
+    localStorage.removeItem('auth_token');
+    this.router.navigate(['/login']);
   }
 
 

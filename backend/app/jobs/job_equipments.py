@@ -2,6 +2,7 @@ from apscheduler.schedulers.background import BackgroundScheduler
 from app.models.equipment import Equipment
 from app.core.database import SessionLocal
 from app.services.mail_service import send_equipment_expired_email
+from app.shared.config.job_controll import already_ran_today, mark_as_ran_today
 from datetime import datetime
 import logging
 
@@ -14,6 +15,45 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 def check_expired_equipments():
+    if already_ran_today():
+        logger.info("Job de expiração já executado hoje. Ignorando.")
+        return
+
+    db = SessionLocal()
+    try:
+        expired = db.query(Equipment).filter(
+            Equipment.data_limite < datetime.utcnow().date(),
+            Equipment.is_active == True
+        ).all()
+
+        if not expired:
+            logger.info("Nenhum equipamento expirado encontrado.")
+        else:
+            for eq in expired:
+                eq.is_active = False
+                db.commit()
+                logger.info(f"Equipamento {eq.codigo} desativado por expiração.")
+
+                try:
+                    if eq.responsavel:
+                        send_equipment_expired_email(
+                            email=eq.responsavel,
+                            codigo=eq.codigo,
+                            nome_posto=eq.nome_do_posto
+                        )
+                        logger.info(f"E-mail enviado para {eq.responsavel}.")
+                except Exception as e:
+                    logger.error(f"Erro ao enviar e-mail: {e}")
+
+        # ✅ marca execução somente se tudo rodou
+        mark_as_ran_today()
+
+    except Exception as e:
+        logger.error(f"Erro no job de expiração: {e}")
+        db.rollback()
+    finally:
+        db.close()
+
     db = SessionLocal()
     try:
         expired = db.query(Equipment).filter(

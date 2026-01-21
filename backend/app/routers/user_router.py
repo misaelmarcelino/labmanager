@@ -10,6 +10,7 @@ from app.core.security import hash_password
 from app.models.user import User
 from app.schemas.user_schema import UserCreate, UserUpdate, UserSelfUpdate, UserResponse
 from app.services.mail_service import send_welcome_email
+from app.shared.config.logging import logging
 
 router = APIRouter(prefix="/users", tags=["Usuários"])
 
@@ -47,7 +48,8 @@ def create_user(
         name=user_data.name,
         email=user_data.email,
         password=hash_password(temp_password),
-        role=user_data.role.value.upper()
+        role=user_data.role.value.upper(),
+        is_first_access=True
     )
 
     db.add(new_user)
@@ -56,10 +58,11 @@ def create_user(
 
     # Envio de e-mail de boas-vindas
     try:
-        send_welcome_email(new_user.email, new_user.name, temp_password)
+        send_welcome_email(new_user.email, new_user.name, temp_password) #type: ignore
         email_status = "E-mail de acesso enviado ao colaborador."
     except Exception as e:
-        print(f"⚠️ Erro ao enviar e-mail: {e}")
+        logging.error(f"⚠️ Erro ao enviar e-mail: {e}")
+        # print(f"⚠️ Erro ao enviar e-mail: {e}")
         email_status = "Usuário criado, mas houve erro ao enviar o e-mail."
 
     return JSONResponse(
@@ -75,8 +78,9 @@ def create_user(
         }
     )
 
+
 # 🔹 Obter informações do próprio perfil
-@router.get("/me", response_model=UserResponse, summary="Obter informações do próprio perfil")
+@router.get("/users/me", response_model=UserResponse, summary="Obter informações do próprio perfil")
 def get_own_profile(current_user: User = Depends(get_current_user)):
     """
     Retorna as informações do colaborador autenticado com base no token JWT.
@@ -85,38 +89,24 @@ def get_own_profile(current_user: User = Depends(get_current_user)):
 
 # 🔹 Atualizar o próprio perfil
 @router.put("/me", response_model=UserResponse, summary="Atualizar o próprio perfil")
-def update_own_profile(
+def update_own_profile( #type: ignore
     user_data: UserSelfUpdate,
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user)
 ):
     if user_data.name:
-        current_user.name = user_data.name
+        current_user.name = user_data.name #type: ignore
     if user_data.email:
         existing = db.query(User).filter(User.email == user_data.email, User.id != current_user.id).first()
         if existing:
             raise HTTPException(status_code=400, detail="E-mail já está em uso")
-        current_user.email = user_data.email
+        current_user.email = user_data.email #type: ignore
     if user_data.password:
-        current_user.password = hash_password(user_data.password)
+        current_user.password = hash_password(user_data.password) #type: ignore
 
     db.commit()
     db.refresh(current_user)
     return current_user
-
-
-# # 🔹 Buscar usuário por ID
-# @router.get("/{user_id}", response_model=UserResponse, summary="Buscar usuário por ID")
-# def get_user(
-#     user_id: int,
-#     db: Session = Depends(get_db),
-#     _: User = Depends(require_admin)
-# ):
-#     user = db.query(User).filter(User.id == user_id).first()
-#     if not user:
-#         raise HTTPException(status_code=404, detail="Usuário não encontrado")
-#     return user
-
 
 # 🔹 Atualizar usuário (ADMIN)
 @router.put("/{user_id}", response_model=UserResponse, summary="Atualizar usuário existente (apenas admin)")
@@ -132,16 +122,16 @@ def update_user(
 
     # Atualiza apenas campos fornecidos
     if user_data.name:
-        user.name = user_data.name
+        user.name = user_data.name #type: ignore
     if user_data.email:
         existing = db.query(User).filter(User.email == user_data.email, User.id != user_id).first()
         if existing:
             raise HTTPException(status_code=400, detail="E-mail já está em uso")
-        user.email = user_data.email
+        user.email = user_data.email #type: ignore
     if user_data.password:
-        user.password = hash_password(user_data.password)
+        user.password = hash_password(user_data.password) #type: ignore
     if user_data.role:
-        user.role = user_data.role.value.upper()
+        user.role = user_data.role.value.upper() #type: ignore
 
     db.commit()
     db.refresh(user)
@@ -173,14 +163,14 @@ def update_own_profile(
     current_user: User = Depends(get_current_user)
 ):
     if user_data.name:
-        current_user.name = user_data.name
+        current_user.name = user_data.name #type: ignore
     if user_data.email:
         existing = db.query(User).filter(User.email == user_data.email, User.id != current_user.id).first()
         if existing:
             raise HTTPException(status_code=400, detail="E-mail já está em uso")
-        current_user.email = user_data.email
+        current_user.email = user_data.email #type: ignore
     if user_data.password:
-        current_user.password = hash_password(user_data.password)
+        current_user.password = hash_password(user_data.password) #type: ignore
 
     db.commit()
     db.refresh(current_user)

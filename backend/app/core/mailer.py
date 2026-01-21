@@ -6,7 +6,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from email.utils import formataddr
-
+from app.shared.config.logging import logging
 from app.shared.security import secret_provider
 
 settings = get_settings()
@@ -43,7 +43,7 @@ def send_email(to: str, subject: str, body: str, logo_filename: str = "logo-emai
             logo.add_header("Content-Disposition", "inline", filename=logo_filename)
             msg.attach(logo)
     else:
-        print(f"⚠️ Logo não encontrado: {logo_path}")
+        logging.warning(f"⚠️ Logo não encontrado: {logo_path}")
 
     try:
         with smtplib.SMTP(settings.SMTP_SERVER, settings.SMTP_PORT) as server:
@@ -51,4 +51,4 @@ def send_email(to: str, subject: str, body: str, logo_filename: str = "logo-emai
             server.login(smtp_user, smtp_pass)
             server.send_message(msg)
     except Exception as e:
-        print(f"⚠️ Erro ao enviar e-mail: {e}")
+        logging.error(f"⚠️ Erro ao enviar e-mail: {e}")

@@ -32,6 +32,7 @@ pyinstaller==6.16.0
 pyinstaller-hooks-contrib==2025.9
 python-dotenv==1.1.1
 python-jose==3.5.0
+pywin32==311
 pywin32-ctypes==0.2.3
 PyYAML==6.0.3
 rsa==4.9.1

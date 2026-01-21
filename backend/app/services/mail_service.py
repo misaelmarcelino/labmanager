@@ -24,7 +24,10 @@ def render_template(template_name: str, **kwargs):
 
 def send_welcome_email(email: str, name: str, temp_password: str):
     subject = "🎉 Bem-vindo ao Lab Manager!"
-    reset_link = f"{settings.FRONTEND_URL}/redefinir-senha"
+    reset_link = (
+        f"{settings.URL}/redefinir-senha"
+        f"?first=true&email={email}"
+    )
 
     html_body = render_template(
         "welcome.html",
@@ -38,7 +41,7 @@ def send_welcome_email(email: str, name: str, temp_password: str):
 
 def send_reset_password_email(email: str, name: str, token: str):
     subject = "🔐 Redefinição de Senha - Lab Manager"
-    reset_link = f"{settings.FRONTEND_URL}/redefinir-senha?token={token}"
+    reset_link = f"{settings.URL}/redefinir-senha?token={token}"
 
     html_body = render_template(
         "reset_password.html",
@@ -74,3 +77,12 @@ def send_equipment_expired_email(recipients: list[str], codigo: str, nome_posto:
     )
     for email in recipients:    
         send_email(to=email, subject=subject, body=html_body)
+
+def send_confirm_change_email(email: str):
+    subject = "✅ Senha Alterada com Sucesso - Lab Manager"
+
+    html_body = render_template(
+        "confirm_change_mail.html",
+        portal_link=f"{settings.URL}/login",
+    )
+    send_email(to=email, subject=subject, body=html_body)

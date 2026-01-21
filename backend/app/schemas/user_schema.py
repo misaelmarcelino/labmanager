@@ -35,3 +35,5 @@ class UserResponse(BaseModel):
 class UserCreateResponse(BaseModel):
     message: str
     user: UserResponse
+
+

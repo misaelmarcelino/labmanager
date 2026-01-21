@@ -8,6 +8,8 @@ class Settings(BaseSettings):
     APP_NAME: str = "Lab Manager API"
     APP_VERSION: str = "1.0.0"
 
+    ADMIN_MASTER_EMAIL: str = Field(..., validation_alias="ADMIN_MASTER_EMAIL")
+    ADMIN_MASTER_PASSWORD: str = Field(..., validation_alias="ADMIN_MASTER_PASSWORD")
     # Database
     DATABASE_ENGINE: str = "sqlite"  # sqlite | postgres
     DATABASE_POSTGRES_URL: str | None = None
@@ -20,9 +22,9 @@ class Settings(BaseSettings):
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
 
     # Servidor
-    HOST: str = "127.0.0.1"
-    PORT: int = 5000
-    RELOAD: bool = True
+    HOST: str = "0.0.0.0"
+    PORT: int = 1518
+    RELOAD: bool = False
 
     # E-mail
     SMTP_SERVER: str = Field(..., validation_alias="SMTP_SERVER")

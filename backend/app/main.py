@@ -10,6 +10,8 @@ from app.core.database import Base, engine
 from app.core.config import get_settings
 from app.routers import auth_router, user_router, equipment_router, report_router
 from app.jobs.job_equipments import scheduler, check_expired_equipments
+from app.shared.config.logging import logging
+
 
 settings = get_settings()
 
@@ -24,8 +26,13 @@ Base.metadata.create_all(bind=engine)
 
 @app.on_event("startup")
 def start_jobs():
+    if scheduler.running:
+        logging.warning("Scheduler já está em execução. Ignorando startup.")
+        return
+
     scheduler.start()
-    check_expired_equipments()  # roda uma vez na inicialização
+    logging.info("Scheduler iniciado com sucesso.")
+    check_expired_equipments()
 
 
 # 🔹 CORS (frontend local e backend servindo build Angular)

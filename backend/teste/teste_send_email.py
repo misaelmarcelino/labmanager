@@ -7,5 +7,6 @@ server = smtplib.SMTP("smtp.office365.com", 587)
 server.set_debuglevel(1)
 server.starttls()
 server.login(EMAIL, PASS)
+
 print("✅ Login OK!")
 server.quit()

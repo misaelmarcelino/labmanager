@@ -21,3 +21,8 @@ class PasswordResetRequest(BaseModel):
 class PasswordResetConfirm(BaseModel):
     token: str
     new_password: str
+
+class FirstAccessSchema(BaseModel):
+    email: EmailStr
+    temp_password: str
+    new_password: str

@@ -10,7 +10,7 @@ import { HeaderComponent } from '../../../shared/header/header.component';
   standalone: true,
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  imports: [CommonModule, FormsModule, RouterLink, HeaderComponent]
+  imports: [CommonModule, FormsModule, RouterLink]
 })
 export class LoginComponent {
   email = '';
@@ -24,13 +24,15 @@ export class LoginComponent {
     this.loading = true;
     this.errorMessage = null;
 
-    this.auth.login(this.email, this.password).subscribe({
+    const email = this.email.trim().toLowerCase();
+
+    this.auth.login(email, this.password).subscribe({
       next: (response) => {
         this.loading = false;
 
         if (response.is_first_access) {
           this.router.navigate(['/redefinir-senha'], {
-            queryParams: { email: this.email, first: true },
+            queryParams: { email: email, first: true },
           });
         } else {
           const destino = response.role === 'ADMIN' ? '/portal' : '/home';

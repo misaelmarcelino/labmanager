@@ -3,15 +3,14 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Router, RouterLink } from '@angular/router';
 
 import { AuthService } from '../../../core/services/auth.service';
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './forgot-password.component.html',
   styleUrls: ['./forgot-password.component.scss'],
 })
@@ -21,20 +20,22 @@ export class ForgotPasswordComponent {
   successMessage: string | null = null;
   loading = false;
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(private auth: AuthService ) {}
 
   submit(): void {
     this.errorMessage = null;
     this.successMessage = null;
 
-    if (!this.email) {
+    const email = this.email.trim().toLowerCase();
+
+    if (email) {
       this.errorMessage = 'Informe um email válido.';
       return;
     }
 
     this.loading = true;
 
-    this.auth.requestPasswordReset(this.email).subscribe({
+    this.auth.requestPasswordReset(email).subscribe({
       next: () => {
         this.successMessage = 'Se esse email estiver cadastrado, você receberá instruções para redefinir sua senha.';
       },

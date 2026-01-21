@@ -15,9 +15,10 @@ from app.schemas.auth_schema import (
     ChangePasswordRequest,
     ChangePasswordResponse,
     PasswordResetRequest,
-    PasswordResetConfirm
+    PasswordResetConfirm,
+    FirstAccessSchema
 )
-from app.services.mail_service import send_reset_password_email
+from app.services.mail_service import send_confirm_change_email, send_reset_password_email
 
 router = APIRouter(prefix="/auth", tags=["Authentication"])
 
@@ -28,7 +29,7 @@ router = APIRouter(prefix="/auth", tags=["Authentication"])
 def login(request: LoginRequest, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == request.email).first()
 
-    if not user or not verify_password(request.password, user.password):
+    if not user or not verify_password(request.password, user.password): #type: ignore
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="E-mail ou senha incorretos",
@@ -60,7 +61,7 @@ def change_password(
     current_user: User = Depends(get_current_user)
 ):
     # 1️⃣ Verifica senha atual
-    if not verify_password(data.old_password, current_user.password):
+    if not verify_password(data.old_password, current_user.password): #type: ignore
         raise HTTPException(status_code=400, detail="Senha atual incorreta")
 
     # 2️⃣ Valida se a nova senha é diferente da anterior
@@ -68,8 +69,8 @@ def change_password(
         raise HTTPException(status_code=400, detail="A nova senha deve ser diferente da atual")
 
     # 3️⃣ Atualiza a senha
-    current_user.password = hash_password(data.new_password)
-    current_user.is_first_access = False  # ✅ marca como redefinida
+    current_user.password = hash_password(data.new_password) #type: ignore
+    current_user.is_first_access = False  # ✅ marca como redefinida  #type: ignore
     db.commit()
     db.refresh(current_user)
 
@@ -85,8 +86,8 @@ def reset_password_request(payload: PasswordResetRequest, db: Session = Depends(
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
-    token = create_reset_token(user.email)
-    send_reset_password_email(user.email, user.name, token)
+    token = create_reset_token(user.email) #type: ignore
+    send_reset_password_email(user.email, user.name, token) #type: ignore
 
     return {"message": "E-mail de redefinição enviado com sucesso!"}
 
@@ -104,9 +105,35 @@ def reset_password_confirm(payload: PasswordResetConfirm, db: Session = Depends(
     if not user:
         raise HTTPException(status_code=404, detail="Usuário não encontrado")
 
-    user.password = hash_password(payload.new_password)
-    user.is_first_access = False  # ✅ redefiniu senha → marca como já acessado
+    user.password = hash_password(payload.new_password) #type: ignore
+    user.is_first_access = False  # ✅ redefiniu senha → marca como já acessado #type: ignore
     db.commit()
     db.refresh(user)
 
     return {"message": "Senha redefinida com sucesso!"}
+
+
+@router.post("/first-access", summary="Primeiro acesso - definir nova senha")
+def first_access(
+    payload: FirstAccessSchema,
+    db: Session = Depends(get_db)
+):
+    user = db.query(User).filter(User.email == payload.email).first()
+
+    if not user:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+
+    if not user.is_first_access: #type: ignore
+        raise HTTPException(status_code=400, detail="Usuário já realizou o primeiro acesso")
+
+    if not verify_password(payload.temp_password, user.password): #type: ignore
+        raise HTTPException(status_code=400, detail="Senha atual incorreta")
+
+    user.password = hash_password(payload.new_password) #type: ignore
+    user.is_first_access = False #type: ignore
+
+    send_confirm_change_email(user.email)  # Envia e-mail de confirmação #type: ignore
+
+    db.commit()
+
+    return {"message": "Senha definida com sucesso"}

@@ -57,7 +57,7 @@ export class SettingsComponent implements OnInit {
       return;
     }
 
-    this.authService.changePassword(this.oldPassword, this.newPassword).subscribe({
+    this.authService.resetPassword(this.oldPassword, this.newPassword).subscribe({
       next: () => {
         alert('Senha alterada com sucesso!');
         this.oldPassword = '';

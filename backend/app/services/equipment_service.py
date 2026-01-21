@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.equipment import Equipment
 from app.schemas.equipment_schema import EquipmentCreate, EquipmentUpdate
 from app.services.mail_service import send_new_equipment_email
+from app.shared.config.logging import logging
 
 def list_equipments(db: Session):
     return db.query(Equipment).filter(Equipment.is_active == True).all()
@@ -41,7 +42,8 @@ def create_equipment(db: Session, data: EquipmentCreate):
                 data_limite=equipment.data_limite.strftime("%d/%m/%Y")
             )
     except Exception as e:
-        print(f"⚠️ Erro ao enviar e-mail de novo equipamento: {e}")
+        logging.error(f"⚠️ Erro ao enviar e-mail de novo equipamento: {e}")
+        # print(f"⚠️ Erro ao enviar e-mail de novo equipamento: {e}")
 
     return equipment
 

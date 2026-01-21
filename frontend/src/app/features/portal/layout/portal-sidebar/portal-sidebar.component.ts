@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { RouterLink } from "@angular/router";
+import { Router, RouterLink } from "@angular/router";
 import { AuthService } from '../../../../core/services/auth.service';
 
 @Component({
@@ -11,9 +11,11 @@ import { AuthService } from '../../../../core/services/auth.service';
 })
 export class PortalSidebarComponent {
 
-  constructor(private auth: AuthService) {}
+  constructor(private auth: AuthService, private router: Router) {}
 
   logout(): void {
     this.auth.logout();
+    localStorage.removeItem('auth_token');
+    this.router.navigate(['/login']);
   }
 }
