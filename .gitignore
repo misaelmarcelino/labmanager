@@ -60,7 +60,9 @@ venv.bak/
 .env
 .env.local
 .env.development
+.env.dev
 .env.production
+.env.prod
 .env.test
 
 # 🗄️ Banco de dados (SQLite)
