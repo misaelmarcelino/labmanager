@@ -1,158 +1,144 @@
-```md
 <div align="center">
   <img src="docs/logo.png" width="180" alt="Logo LabManager"/>
-  <h1>LabManager</h1>
-  <p><strong>Portal corporativo para homologação de equipamentos e softwares</strong></p>
-
-  <img src="https://img.shields.io/badge/Backend-FastAPI-success?logo=fastapi"/>
-  <img src="https://img.shields.io/badge/Frontend-Angular-red?logo=angular"/>
-  <img src="https://img.shields.io/badge/Database-SQLite%20%7C%20PostgreSQL-blue"/>
+  <h1 align="center"><img src="docs/logo.png" alt="LabManager Logo" width="300"/></h1>
+  <p>Sistema multiusuário para homologação de equipamentos corporativos</p>
+  <img src="https://img.shields.io/badge/FastAPI-Backend-success?logo=fastapi"/>
+  <img src="https://img.shields.io/badge/Angular-Frontend-red?logo=angular"/>
   <img src="https://img.shields.io/badge/License-MIT-green"/>
 </div>
-
 ---
 
 ## 🧭 Visão Geral
 
-O **LabManager** é um **portal corporativo multiusuário** desenvolvido para **gerenciar o processo de homologação de equipamentos e softwares** em ambientes técnicos de laboratório.
+O **LabManager** é um sistema multiusuário projetado para gerenciar equipamentos em **fase de homologação e testes corporativos**.  
+Seu propósito é oferecer uma comunicação eficiente e rastreável entre as equipes de **sustentação, engenharia e arquitetura**, garantindo que todos os dispositivos e aplicações em validação estejam devidamente documentados e acompanhados.
 
-Seu objetivo é **centralizar informações, padronizar fluxos e garantir rastreabilidade**, promovendo uma comunicação eficiente entre as áreas de **sustentação, engenharia e arquitetura** durante os ciclos de validação.
-
-O sistema substitui controles manuais e descentralizados, oferecendo **segurança, histórico auditável e métricas operacionais**.
-
----
-
-## 🎯 Objetivos do Projeto
-
-- Centralizar o processo de homologação
-- Garantir controle de acesso por perfil
-- Acompanhar equipamentos em fase de testes
-- Registrar histórico técnico e status
-- Apoiar decisões com dashboards e relatórios
-- Servir como base para evolução do laboratório corporativo
+O sistema foi desenvolvido para uso interno em ambientes de laboratório técnico, possibilitando o cadastro, acompanhamento e aprovação de equipamentos e softwares que passam por ciclos de validação.
 
 ---
 
-## 🚀 Tecnologias Utilizadas
+## 🚀 Tecnologias
 
-### Backend
-- 🐍 Python 3.12
-- ⚡ FastAPI
-- 🗃️ SQLAlchemy
-- 🔁 Alembic (migrations)
-- 🔐 Autenticação JWT
-- 📦 Uvicorn
+**Backend:**
 
-### Frontend
-- 🅰️ Angular 17+
-- 🎨 Bootstrap 5
-- 🧩 TypeScript
-- 🔔 Estrutura preparada para notificações internas
+- 🐍 [Python 3.12](https://www.python.org/)
+- ⚡ [FastAPI](https://fastapi.tiangolo.com/)
+- 🗃️ [SQLAlchemy](https://www.sqlalchemy.org/)
+- 🔁 [Alembic](https://alembic.sqlalchemy.org/)
+- 📦 [Uvicorn](https://www.uvicorn.org/)
+- 🔐 JWT Authentication
 
-### Infraestrutura
-- 🐳 Docker e Docker Compose
-- 🌐 Middleware CORS
-- 💾 SQLite (dev) / PostgreSQL (prod)
+**Frontend:**
 
----
+- 🅰️ [Angular 17+](https://angular.dev/)
+- 🎨 [Bootstrap 5](https://getbootstrap.com/)
+- 🧩 [TypeScript](https://www.typescriptlang.org/)
+- 🔔 Sistema de notificações em tempo real (em desenvolvimento)
 
-## 🧱 Funcionalidades Principais
+**Infraestrutura:**
 
-- Autenticação segura via JWT
-- Controle de acesso por perfil (Admin / Técnico / Visitante)
-- Gestão de usuários
-- Cadastro e acompanhamento de equipamentos em homologação
-- Dashboard administrativo com métricas
-- Exportação de relatórios (CSV / PDF)
-- Reset de senha com envio de e-mail
-- Estrutura modular e escalável
+- 🐳 Docker / Docker Compose
+- 🌐 CORS Middleware
+- 💾 SQLite / PostgreSQL
 
 ---
 
-## 🔐 Segurança e Autenticação
+## 🧱 Implementações
 
-- JWT Bearer Token
-- Proteção de rotas por role
-- Tokens armazenados no `localStorage`
-- CORS configurado para frontend
-- Reset de senha com token temporário
+- ✅ Módulo de **Reset de Senha e Configurações de Perfil**
+- ⚙️ Dashboard administrativo com métricas de homologação
+- 📤 Exportação de relatórios (CSV, PDF)
+- 📬 Notificações por e-mail e painel interno
+- 👥 Perfis de usuário com permissões personalizadas (Admin / Técnico / Visitante)
 
 ---
 
-## 🧪 Principais Rotas da API
+## 🧪 Testes e Principais Rotas (API)
 
-### Autenticação
+### 🔐 Autenticação
+
 | Método | Rota | Descrição |
-|------|------|-----------|
-| POST | `/api/auth/login` | Login com JWT |
-| POST | `/api/auth/forgot-password` | Envio de link de redefinição |
-| POST | `/api/auth/reset-password` | Redefinição de senha |
+|--------|------|------------|
+| `POST` | `/api/auth/login` | Login de usuário com JWT |
+| `POST` | `/api/auth/forgot-password` | Envio de link para redefinição de senha |
+| `POST` | `/api/auth/reset-password` | Redefinição da senha do usuário |
 
-### Usuários
-| Método | Rota | Descrição |
-|------|------|-----------|
-| GET | `/api/users/me` | Perfil do usuário autenticado |
-| PUT | `/api/users/me` | Atualização de perfil |
-| GET | `/api/users/` | Listagem de usuários (Admin) |
-| POST | `/api/users/` | Criação de usuário (Admin) |
+### 👤 Usuários
 
-### Equipamentos
 | Método | Rota | Descrição |
-|------|------|-----------|
-| GET | `/api/equipments/` | Listar equipamentos |
-| POST | `/api/equipments/` | Cadastrar equipamento |
-| PUT | `/api/equipments/{id}` | Atualizar equipamento |
-| DELETE | `/api/equipments/{id}` | Desativar (soft delete) |
+|--------|------|------------|
+| `GET` | `/api/users/` | Lista todos os usuários (apenas admin) |
+| `GET` | `/api/users/me` | Retorna o perfil do usuário autenticado |
+| `PUT` | `/api/users/me` | Atualiza o próprio perfil |
+| `POST` | `/api/users/` | Cria novo usuário (admin) |
+
+### ⚙️ Equipamentos
+
+| Método | Rota | Descrição |
+|--------|------|------------|
+| `GET` | `/api/equipments/` | Lista equipamentos cadastrados |
+| `POST` | `/api/equipments/` | Cadastra novo equipamento |
+| `PUT` | `/api/equipments/{id}` | Atualiza informações do equipamento |
+| `DELETE` | `/api/equipments/{id}` | Desativa equipamento (soft delete) |
 
 ---
 
 ## 🗂️ Estrutura de Pastas
 
-### Backend (FastAPI)
-
-```
+### 🧩 Backend (FastAPI)
 
 backend/
 ├── app/
-│   ├── main.py
-│   ├── core/
-│   │   ├── database.py
-│   │   ├── security.py
-│   │   └── dependencies.py
-│   ├── models/
-│   ├── schemas/
-│   ├── routers/
-│   ├── services/
-│   └── utils/
+│ ├── main.py
+│ ├── core/
+│ │ ├── database.py
+│ │ ├── security.py
+│ │ └── dependencies.py
+│ ├── models/
+│ ├── schemas/
+│ ├── routers/
+│ ├── services/
+│ └── utils/
 └── tests/
 
-```
-
-### Frontend (Angular)
-
-```
+### 🎨 Frontend (Angular)
 
 frontend/
 ├── src/
-│   ├── app/
-│   │   ├── core/
-│   │   ├── features/
-│   │   │   ├── auth/
-│   │   │   ├── portal/
-│   │   │   ├── dashboard/
-│   │   │   ├── equipment/
-│   │   │   ├── user/
-│   │   │   └── reports/
-│   │   └── shared/
-│   └── assets/
-
-````
+│ ├── app/
+│ │ ├── core/
+│ │ │ ├── environments/
+│ │ │ ├── model/
+│ │ | └── services/
+│ │ ├── features/
+│ │ │ ├── auth/
+│ │ │ ├── home/
+│ │ │ └── portal/
+│ │ │ │ ├── layout/
+│ │ │ │ ├── dashboard/
+│ │ │ │ ├── equipment/
+│ │ │ │ ├── user/
+│ │ │ │ ├── reports/
+│ │ │ │ └── settings/
+│ │ ├── shared/
+│ │ │ │ ├── header/
+│ │ │ │ └── modal/
+│ └── assets/
 
 ---
 
-## ⚙️ Variáveis de Ambiente (`.env`)
+## 🔐 Autenticação e Segurança
 
-```env
+- Autenticação baseada em **JWT Bearer Token**
+- Proteção de rotas com **roles** (Admin / User)
+- Tokens armazenados com segurança no `localStorage`
+- Middleware CORS configurado para o frontend (`http://localhost:4200`)
+
+---
+
+## 🧰 Variáveis de Ambiente (`.env`)
+
+```bash
 # Banco de dados
 DATABASE_URL=sqlite:///./labmanager.db
 
@@ -161,7 +147,7 @@ SECRET_KEY=supersecretkey
 ALGORITHM=HS256
 ACCESS_TOKEN_EXPIRE_MINUTES=120
 
-# SMTP
+# SMTP (envio de e-mails)
 SMTP_HOST=smtp.office365.com
 SMTP_PORT=587
 SMTP_USER=seuemail@empresa.com
@@ -169,85 +155,72 @@ SMTP_PASS=sua_senha
 
 # Ambiente
 APP_ENV=development
-````
 
----
-
-## ▶️ Execução do Projeto
-
-### Clonar repositório
-
-```bash
-git clone https://github.com/empresa/labmanager.git
-cd labmanager
 ```
 
-### Subir com Docker
+## 🧑‍💻 Exemplos de Uso
+
+Login
+
+Request
 
 ```bash
-docker-compose up --build
-```
 
-Frontend: `http://localhost:4200`
-Backend (API): `http://localhost:8000`
-
----
-
-## 🧪 Exemplo de Uso
-
-### Login
-
-```http
 POST /api/auth/login
 {
-  "email": "usuario@empresa.com",
+  "email": "colaborador@empresa.com",
   "password": "senha123"
+}
+
+```
+
+Response
+
+```bash
+
+{
+  "access_token": "eyJhbGciOiJIUzI1NiIs...",
+  "token_type": "bearer"
 }
 ```
 
-### Perfil autenticado
+### 🔹 Buscar perfil autenticado
 
-```http
+```bash
+
 GET /api/users/me
 Authorization: Bearer <token>
 ```
 
----
+## 🧱 Contribuição / Roadmap
 
-## 🛣️ Roadmap
+Contribuições são muito bem-vindas!
+Clone o repositório, crie uma branch com sua feature e envie um PR.
+Siga o padrão de commits semânticos e formatação PEP8.
 
-* Validação avançada de campos obrigatórios
-* Refinamento do fluxo de homologação
-* Visibilidade de equipamentos por perfil
-* Histórico detalhado de validações
-* Notificações internas em tempo real
-* Integração com sistemas corporativos
+### Clonar projeto
 
----
+git clone <https://github.com/empresa/labmanager.git>
 
-## 🤝 Contribuição
+### Criar branch
 
-* Crie uma branch por feature
-* Utilize commits semânticos
-* Siga boas práticas (PEP8 / Angular Style Guide)
-* Envie Pull Requests para revisão
+git checkout -b feature/nova-funcionalidade
 
----
+### Enviar alterações
+
+git commit -m "feat: adiciona módulo de relatórios"
+git push origin feature/nova-funcionalidade
 
 ## 📄 Licença
 
-Este projeto está licenciado sob a licença **MIT**.
+Este projeto está sob a licença MIT.
+Sinta-se livre para usar e modificar conforme necessário.
 
----
+## 👥 Equipe / Autor
 
-## 👤 Autor
+Desenvolvido por Misael Souza Marcelino
+💼 Analista de Sistemas – Sem Parar
+🚗 “Transformando homologações em eficiência.”
 
-**Misael Souza Marcelino**
-Analista de Sistemas – Sem Parar
-
-📧 E-mail: [misael.marcelino@outlook.com.br](mailto:misael.marcelino@outlook.com.br)
-🔗 GitHub: [https://github.com/misaelmarcelino](https://github.com/misaelmarcelino)
-
-> *Transformando homologações em eficiência.*
-
-
+📧 Contato: <misael.marcelino@outlook.com.br>
+🔗 GitHub: misaelmarcelino
