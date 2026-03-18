@@ -1,5 +1,5 @@
 import platform
-from app.core.config import get_settings
+from app.core.labmanager.config import get_settings
 from app.shared.security.windows_provider import WindowsSecretProvider
 from app.shared.security.env_provider import EnvSecretProvider
 from app.shared.security.secret_provider import SecretProvider

@@ -6,12 +6,12 @@ from fastapi.staticfiles import StaticFiles
 
 
 
-from app.core.database import Base, engine
-from app.core.config import get_settings
-from app.routers import auth_router, user_router, equipment_router, report_router
+from app.core.labmanager.database import Base, engine
+from app.core.labmanager.config import get_settings
+from app.routers.labmanager import auth_router, user_router, equipment_router, report_router
+from app.routers.standin import standin_router
 from app.jobs.job_equipments import scheduler, check_expired_equipments
-from app.shared.config.logging import logging
-
+from app.shared.config.labmanager.logging import logging
 
 settings = get_settings()
 
@@ -55,6 +55,7 @@ app.include_router(auth_router.router, prefix="/api")
 app.include_router(user_router.router, prefix="/api")
 app.include_router(equipment_router.router, prefix="/api")
 app.include_router(report_router.router, prefix="/api")
+app.include_router(standin_router.router, prefix="/api")
 
 # ===============================================
 # SERVIR O FRONTEND ANGULAR

@@ -2,8 +2,8 @@ from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.core.database import get_db
-from app.core.dependencies import get_current_user
+from app.core.labmanager.database import get_db
+from app.core.labmanager.dependencies import get_current_user
 from app.schemas.equipment_schema import EquipmentCreate, EquipmentUpdate, EquipmentResponse
 from app.services import equipment_service
 from app.models.equipment import Equipment

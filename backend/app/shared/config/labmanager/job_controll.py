@@ -1,6 +1,6 @@
 from pathlib import Path
 from datetime import date
-from app.shared.config.base_dir import get_base_dir
+from app.shared.config.labmanager.base_dir import get_base_dir
 import sys
 
 LOG_DIR = get_base_dir() / "logs"

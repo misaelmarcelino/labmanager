@@ -4,13 +4,13 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from typing import List
 
-from app.core.database import get_db
-from app.core.dependencies import get_current_user, require_admin
-from app.core.security import hash_password
+from app.core.labmanager.database import get_db
+from app.core.labmanager.dependencies import get_current_user, require_admin
+from app.core.labmanager.security import hash_password
 from app.models.user import User
 from app.schemas.user_schema import UserCreate, UserUpdate, UserSelfUpdate, UserResponse
 from app.services.mail_service import send_welcome_email
-from app.shared.config.logging import logging
+from app.shared.config.labmanager.logging import logging
 
 router = APIRouter(prefix="/users", tags=["Usuários"])
 

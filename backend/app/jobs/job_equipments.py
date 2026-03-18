@@ -1,8 +1,8 @@
 from apscheduler.schedulers.background import BackgroundScheduler
 from app.models.equipment import Equipment
-from app.core.database import SessionLocal
+from app.core.labmanager.database import SessionLocal
 from app.services.mail_service import send_equipment_expired_email
-from app.shared.config.job_controll import already_ran_today, mark_as_ran_today
+from app.shared.config.labmanager.job_controll import already_ran_today, mark_as_ran_today
 from datetime import datetime
 import logging
 

@@ -1,0 +1,60 @@
+<app-header></app-header>
+<div class="container mt-4">
+
+  <h1>Standin Web</h1>
+
+  <input class="form-control mb-3"
+         type="file"
+         (change)="onFileSelected($event)">
+
+  <button class="btn btn-primary"
+          (click)="upload()"
+          [disabled]="loading">
+
+    Processar
+
+  </button>
+
+  <div class="mt-4" *ngIf="loading">
+
+    <h5>Status do processamento</h5>
+
+    <ul class="list-group">
+
+      <li class="list-group-item"
+          *ngFor="let step of steps">
+
+        ✔ {{ step }}
+
+      </li>
+
+    </ul>
+
+    <div class="alert alert-info mt-3">
+      {{ status }}
+    </div>
+
+  </div>
+
+  <div class="mt-4" *ngIf="result">
+
+    <div class="alert alert-success">
+      Processamento finalizado com Sucesso
+    </div>
+
+    <!-- <h5>Pacotes gerados</h5> -->
+
+    <ul class="list-group">
+
+      <li class="list-group-item"
+          *ngFor="let p of result">
+
+        {{ p }}
+
+      </li>
+
+    </ul>
+
+  </div>
+
+</div>

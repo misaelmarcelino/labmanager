@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.models.equipment import Equipment
 from app.schemas.equipment_schema import EquipmentCreate, EquipmentUpdate
 from app.services.mail_service import send_new_equipment_email
-from app.shared.config.logging import logging
+from app.shared.config.labmanager.logging import logging
 
 def list_equipments(db: Session):
     return db.query(Equipment).filter(Equipment.is_active == True).all()

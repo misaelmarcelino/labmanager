@@ -1,14 +1,14 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-from app.core.database import get_db
-from app.core.security import (
+from app.core.labmanager.database import get_db
+from app.core.labmanager.security import (
     verify_password,
     create_access_token,
     hash_password,
     verify_reset_token,
     create_reset_token
 )
-from app.core.dependencies import get_current_user
+from app.core.labmanager.dependencies import get_current_user
 from app.models.user import User
 from app.schemas.auth_schema import (
     LoginRequest,

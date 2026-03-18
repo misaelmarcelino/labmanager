@@ -5,7 +5,7 @@ from pydantic_settings import BaseSettings
 
 
 class Settings(BaseSettings):
-    APP_NAME: str = "Lab Manager API"
+    APP_NAME: str = "Aplicações Credenciados | 2026"
     APP_VERSION: str = "1.0.0"
 
     ADMIN_MASTER_EMAIL: str = Field(..., validation_alias="ADMIN_MASTER_EMAIL")

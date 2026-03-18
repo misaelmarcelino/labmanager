@@ -4,12 +4,12 @@ import sys
 import uvicorn
 from alembic import command
 from alembic.config import Config
-from app.core.config import Settings, get_settings
-from app.core.database import SessionLocal
+from app.core.labmanager.config import Settings, get_settings
+from app.core.labmanager.database import SessionLocal
 from app.models.user import User, RoleEnum
-from app.core.security import hash_password
-from app.shared.config.base_dir import get_base_dir
-from app.shared.config.logging import LOGGING_CONFIG
+from app.core.labmanager.security import hash_password
+from app.shared.config.labmanager.base_dir import get_base_dir
+from app.shared.config.labmanager.logging import LOGGING_CONFIG
 import logging.config
 
 logging.config.dictConfig(LOGGING_CONFIG)

@@ -1,7 +1,7 @@
 import os
 from jinja2 import Environment, FileSystemLoader, select_autoescape
-from app.core.mailer import send_email
-from app.core.config import get_settings
+from app.core.labmanager.mailer import send_email
+from app.core.labmanager.config import get_settings
 
 settings = get_settings()
 # Caminho dos templates HTML

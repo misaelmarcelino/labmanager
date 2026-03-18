@@ -1,7 +1,7 @@
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
 from passlib.context import CryptContext
-from app.core.config import get_settings
+from app.core.labmanager.config import get_settings
 
 settings = get_settings()
 RESET_SECRET_KEY = settings.SECRET_KEY

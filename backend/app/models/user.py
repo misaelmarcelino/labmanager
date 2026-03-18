@@ -1,5 +1,5 @@
 from sqlalchemy import Column, Integer, String, Enum, Boolean, DateTime, func, text
-from app.core.database import Base
+from app.core.labmanager.database import Base
 import enum
 
 

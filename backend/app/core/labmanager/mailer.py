@@ -1,13 +1,12 @@
 import os
 import smtplib
-from app.core.config import get_settings
+from app.core.labmanager.config import get_settings
 from app.shared.security.provider_factory import get_secret_provider
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 from email.mime.image import MIMEImage
 from email.utils import formataddr
-from app.shared.config.logging import logging
-from app.shared.security import secret_provider
+from app.shared.config.labmanager.logging import logging
 
 settings = get_settings()
 def send_email(to: str, subject: str, body: str, logo_filename: str = "logo-email.png"):
